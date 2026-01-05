@@ -1,9 +1,11 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
+import com.google.gson.reflect.TypeToken;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.*;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +29,9 @@ public class ProjectApiImpl implements ProjectApi {
         Map<String, String> queryParams = buildProjectQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/projects", headers, queryParams);
-        return JsonUtil.fromJson(responseBody, ProjectResponse.class);
+        Type type = new TypeToken<CommonApiResponse<ProjectResponse>>(){}.getType();
+        CommonApiResponse<ProjectResponse> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData();
     }
 
     @Override

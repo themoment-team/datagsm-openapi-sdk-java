@@ -1,9 +1,11 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
+import com.google.gson.reflect.TypeToken;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.*;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +29,9 @@ public class StudentApiImpl implements StudentApi {
         Map<String, String> queryParams = buildStudentQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/students", headers, queryParams);
-        return JsonUtil.fromJson(responseBody, StudentResponse.class);
+        Type type = new TypeToken<CommonApiResponse<StudentResponse>>(){}.getType();
+        CommonApiResponse<StudentResponse> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData();
     }
 
     @Override

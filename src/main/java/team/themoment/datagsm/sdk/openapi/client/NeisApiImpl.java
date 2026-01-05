@@ -32,8 +32,9 @@ public class NeisApiImpl implements NeisApi {
         Map<String, String> queryParams = buildMealQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/neis/meals", headers, queryParams);
-        Type listType = new TypeToken<List<Meal>>(){}.getType();
-        return JsonUtil.fromJson(responseBody, listType);
+        Type type = new TypeToken<CommonApiResponse<List<Meal>>>(){}.getType();
+        CommonApiResponse<List<Meal>> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData();
     }
 
     @Override
@@ -42,8 +43,9 @@ public class NeisApiImpl implements NeisApi {
         Map<String, String> queryParams = buildScheduleQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/neis/schedules", headers, queryParams);
-        Type listType = new TypeToken<List<Schedule>>(){}.getType();
-        return JsonUtil.fromJson(responseBody, listType);
+        Type type = new TypeToken<CommonApiResponse<List<Schedule>>>(){}.getType();
+        CommonApiResponse<List<Schedule>> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData();
     }
 
     private Map<String, String> buildMealQueryParams(MealRequest request) {

@@ -1,9 +1,11 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
+import com.google.gson.reflect.TypeToken;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.*;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,10 +29,9 @@ public class ClubApiImpl implements ClubApi {
         Map<String, String> queryParams = buildClubQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/clubs", headers, queryParams);
-        System.out.println("DEBUG - Response JSON: " + responseBody); // 임시 디버깅
-        ClubResponse response = JsonUtil.fromJson(responseBody, ClubResponse.class);
-        System.out.println("DEBUG - Parsed totalElements: " + response.getTotalElements()); // 임시 디버깅
-        return response;
+        Type type = new TypeToken<CommonApiResponse<ClubResponse>>(){}.getType();
+        CommonApiResponse<ClubResponse> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData();
     }
 
     @Override
