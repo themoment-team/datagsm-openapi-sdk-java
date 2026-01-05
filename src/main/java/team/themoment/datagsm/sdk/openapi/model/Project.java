@@ -1,5 +1,6 @@
 package team.themoment.datagsm.sdk.openapi.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class Project {
     private String name;
     private String description;
     private Club club;
-    private List<ParticipantInfo> participants;
+    private List<ParticipantInfo> participants = new ArrayList<>();
 
     public Project() {}
 

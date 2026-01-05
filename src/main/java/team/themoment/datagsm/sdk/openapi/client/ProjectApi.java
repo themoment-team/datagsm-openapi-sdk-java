@@ -31,10 +31,13 @@ public interface ProjectApi {
         private Long clubId;
         private Integer page;
         private Integer size;
+        private ProjectSortBy sortBy;
+        private SortDirection sortDirection;
 
         public ProjectRequest() {
             this.page = 0;
             this.size = 100;
+            this.sortDirection = SortDirection.ASC;
         }
 
         public ProjectRequest projectId(Long projectId) {
@@ -62,6 +65,16 @@ public interface ProjectApi {
             return this;
         }
 
+        public ProjectRequest sortBy(ProjectSortBy sortBy) {
+            this.sortBy = sortBy;
+            return this;
+        }
+
+        public ProjectRequest sortDirection(SortDirection sortDirection) {
+            this.sortDirection = sortDirection;
+            return this;
+        }
+
         public Long getProjectId() {
             return projectId;
         }
@@ -80,6 +93,14 @@ public interface ProjectApi {
 
         public Integer getSize() {
             return size;
+        }
+
+        public ProjectSortBy getSortBy() {
+            return sortBy;
+        }
+
+        public SortDirection getSortDirection() {
+            return sortDirection;
         }
     }
 }

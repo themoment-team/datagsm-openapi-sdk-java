@@ -1,6 +1,7 @@
 package team.themoment.datagsm.sdk.openapi.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class Schedule {
     private String dayCategory;
     private String schoolCourseType;
     private String dayNightType;
-    private List<Integer> targetGrades;
+    private List<Integer> targetGrades = new ArrayList<>();
 
     public Schedule() {}
 

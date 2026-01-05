@@ -1,5 +1,6 @@
 package team.themoment.datagsm.sdk.openapi.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
 public class ProjectResponse {
     private Integer totalPages;
     private Long totalElements;
-    private List<Project> projects;
+    private List<Project> projects = new ArrayList<>();
 
     public ProjectResponse() {}
 

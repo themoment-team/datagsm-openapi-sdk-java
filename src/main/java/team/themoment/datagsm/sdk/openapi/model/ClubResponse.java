@@ -1,5 +1,6 @@
 package team.themoment.datagsm.sdk.openapi.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
 public class ClubResponse {
     private Integer totalPages;
     private Integer totalElements;
-    private List<ClubDetail> clubs;
+    private List<ClubDetail> clubs = new ArrayList<>();
 
     public ClubResponse() {}
 

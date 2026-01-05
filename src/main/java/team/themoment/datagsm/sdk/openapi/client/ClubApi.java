@@ -32,11 +32,14 @@ public interface ClubApi {
         private Integer page;
         private Integer size;
         private Boolean includeLeaderInParticipants;
+        private ClubSortBy sortBy;
+        private SortDirection sortDirection;
 
         public ClubRequest() {
             this.page = 0;
             this.size = 100;
             this.includeLeaderInParticipants = false;
+            this.sortDirection = SortDirection.ASC;
         }
 
         public ClubRequest clubId(Long clubId) {
@@ -69,6 +72,16 @@ public interface ClubApi {
             return this;
         }
 
+        public ClubRequest sortBy(ClubSortBy sortBy) {
+            this.sortBy = sortBy;
+            return this;
+        }
+
+        public ClubRequest sortDirection(SortDirection sortDirection) {
+            this.sortDirection = sortDirection;
+            return this;
+        }
+
         public Long getClubId() {
             return clubId;
         }
@@ -91,6 +104,14 @@ public interface ClubApi {
 
         public Boolean getIncludeLeaderInParticipants() {
             return includeLeaderInParticipants;
+        }
+
+        public ClubSortBy getSortBy() {
+            return sortBy;
+        }
+
+        public SortDirection getSortDirection() {
+            return sortDirection;
         }
     }
 }

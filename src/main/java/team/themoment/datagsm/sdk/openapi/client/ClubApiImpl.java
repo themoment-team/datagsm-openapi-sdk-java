@@ -63,6 +63,12 @@ public class ClubApiImpl implements ClubApi {
         if (request.getIncludeLeaderInParticipants() != null) {
             params.put("includeLeaderInParticipants", request.getIncludeLeaderInParticipants().toString());
         }
+        if (request.getSortBy() != null) {
+            params.put("sortBy", request.getSortBy().name());
+        }
+        if (request.getSortDirection() != null) {
+            params.put("sortDirection", request.getSortDirection().name());
+        }
 
         return params;
     }

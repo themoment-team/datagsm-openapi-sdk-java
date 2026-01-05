@@ -38,10 +38,13 @@ public interface StudentApi {
         private Boolean isLeaveSchool;
         private Integer page;
         private Integer size;
+        private StudentSortBy sortBy;
+        private SortDirection sortDirection;
 
         public StudentRequest() {
             this.page = 0;
             this.size = 300;
+            this.sortDirection = SortDirection.ASC;
         }
 
         public StudentRequest studentId(Long studentId) {
@@ -104,6 +107,16 @@ public interface StudentApi {
             return this;
         }
 
+        public StudentRequest sortBy(StudentSortBy sortBy) {
+            this.sortBy = sortBy;
+            return this;
+        }
+
+        public StudentRequest sortDirection(SortDirection sortDirection) {
+            this.sortDirection = sortDirection;
+            return this;
+        }
+
         public Long getStudentId() {
             return studentId;
         }
@@ -150,6 +163,14 @@ public interface StudentApi {
 
         public Integer getSize() {
             return size;
+        }
+
+        public StudentSortBy getSortBy() {
+            return sortBy;
+        }
+
+        public SortDirection getSortDirection() {
+            return sortDirection;
         }
     }
 }

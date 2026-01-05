@@ -1,6 +1,7 @@
 package team.themoment.datagsm.sdk.openapi.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ public class Meal {
     private String officeName;
     private LocalDate mealDate;
     private MealType mealType;
-    private List<String> mealMenu;
-    private List<String> mealAllergyInfo;
+    private List<String> mealMenu = new ArrayList<>();
+    private List<String> mealAllergyInfo = new ArrayList<>();
     private String mealCalories;
     private String originInfo;
     private String nutritionInfo;

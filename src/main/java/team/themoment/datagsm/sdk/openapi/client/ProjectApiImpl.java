@@ -60,6 +60,12 @@ public class ProjectApiImpl implements ProjectApi {
         if (request.getSize() != null) {
             params.put("size", request.getSize().toString());
         }
+        if (request.getSortBy() != null) {
+            params.put("sortBy", request.getSortBy().name());
+        }
+        if (request.getSortDirection() != null) {
+            params.put("sortDirection", request.getSortDirection().name());
+        }
 
         return params;
     }

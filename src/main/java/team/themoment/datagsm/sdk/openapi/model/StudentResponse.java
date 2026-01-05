@@ -1,12 +1,13 @@
 package team.themoment.datagsm.sdk.openapi.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 학생 목록 응답
  */
 public class StudentResponse {
-    private List<Student> students;
+    private List<Student> students = new ArrayList<>();
     private Integer totalElements;
     private Integer totalPages;
     private Integer currentPage;
