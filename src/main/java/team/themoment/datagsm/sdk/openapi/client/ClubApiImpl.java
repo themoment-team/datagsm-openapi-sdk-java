@@ -27,7 +27,10 @@ public class ClubApiImpl implements ClubApi {
         Map<String, String> queryParams = buildClubQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/clubs", headers, queryParams);
-        return JsonUtil.fromJson(responseBody, ClubResponse.class);
+        System.out.println("DEBUG - Response JSON: " + responseBody); // 임시 디버깅
+        ClubResponse response = JsonUtil.fromJson(responseBody, ClubResponse.class);
+        System.out.println("DEBUG - Parsed totalElements: " + response.getTotalElements()); // 임시 디버깅
+        return response;
     }
 
     @Override
