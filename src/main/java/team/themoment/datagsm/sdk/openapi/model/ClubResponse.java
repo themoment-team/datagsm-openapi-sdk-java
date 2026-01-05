@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class ClubResponse {
     private Integer totalPages;
-    private Integer totalElements;
+    private Long totalElements;
     private List<ClubDetail> clubs = new ArrayList<>();
 
     public ClubResponse() {}
@@ -21,11 +21,11 @@ public class ClubResponse {
         this.totalPages = totalPages;
     }
 
-    public Integer getTotalElements() {
+    public Long getTotalElements() {
         return totalElements;
     }
 
-    public void setTotalElements(Integer totalElements) {
+    public void setTotalElements(Long totalElements) {
         this.totalElements = totalElements;
     }
 

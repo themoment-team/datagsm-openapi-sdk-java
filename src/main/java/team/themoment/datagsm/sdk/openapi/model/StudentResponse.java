@@ -8,9 +8,8 @@ import java.util.List;
  */
 public class StudentResponse {
     private List<Student> students = new ArrayList<>();
-    private Integer totalElements;
+    private Long totalElements;
     private Integer totalPages;
-    private Integer currentPage;
 
     public StudentResponse() {}
 
@@ -22,11 +21,11 @@ public class StudentResponse {
         this.students = students;
     }
 
-    public Integer getTotalElements() {
+    public Long getTotalElements() {
         return totalElements;
     }
 
-    public void setTotalElements(Integer totalElements) {
+    public void setTotalElements(Long totalElements) {
         this.totalElements = totalElements;
     }
 
@@ -38,21 +37,12 @@ public class StudentResponse {
         this.totalPages = totalPages;
     }
 
-    public Integer getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
-    }
-
     @Override
     public String toString() {
         return "StudentResponse{" +
                 "students=" + students +
                 ", totalElements=" + totalElements +
                 ", totalPages=" + totalPages +
-                ", currentPage=" + currentPage +
                 '}';
     }
 }
