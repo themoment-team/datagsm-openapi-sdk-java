@@ -1,0 +1,35 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'oracle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build publishToMavenLocal -x test
+
+      - name: Trigger JitPack build
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          REPO_FULL_NAME=${{ github.repository }}
+          curl -s "https://jitpack.io/api/builds/com.github.${REPO_FULL_NAME//\//.}/${TAG_NAME}"
