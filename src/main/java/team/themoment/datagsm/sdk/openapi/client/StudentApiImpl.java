@@ -9,9 +9,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 학생 데이터 API 구현
- */
 public class StudentApiImpl implements StudentApi {
     private final HttpClient httpClient;
     private final String apiKey;
@@ -78,6 +75,9 @@ public class StudentApiImpl implements StudentApi {
         }
         if (request.getIsLeaveSchool() != null) {
             params.put("isLeaveSchool", request.getIsLeaveSchool().toString());
+        }
+        if (request.getIsGraduated() != null) {
+            params.put("isGraduated", request.getIsGraduated().toString());
         }
         if (request.getPage() != null) {
             params.put("page", request.getPage().toString());
