@@ -36,6 +36,7 @@ public interface StudentApi {
         private StudentRole role;
         private Integer dormitoryRoom;
         private Boolean isLeaveSchool;
+        private Boolean isGraduate;
         private Integer page;
         private Integer size;
         private StudentSortBy sortBy;
@@ -97,6 +98,11 @@ public interface StudentApi {
             return this;
         }
 
+        public StudentRequest isGraduate(Boolean isGraduate) {
+            this.isGraduate = isGraduate;
+            return this;
+        }
+
         public StudentRequest page(Integer page) {
             this.page = page;
             return this;
@@ -155,6 +161,10 @@ public interface StudentApi {
 
         public Boolean getIsLeaveSchool() {
             return isLeaveSchool;
+        }
+
+        public Boolean getIsGraduated() {
+            return isGraduate;
         }
 
         public Integer getPage() {
