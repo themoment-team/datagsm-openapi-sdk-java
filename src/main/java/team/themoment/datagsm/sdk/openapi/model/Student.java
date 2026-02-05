@@ -16,7 +16,6 @@ public class Student {
     private StudentRole role;
     private Integer dormitoryFloor;
     private Integer dormitoryRoom;
-    private Boolean isLeaveSchool;
     private Club majorClub;
     private Club jobClub;
     private Club autonomousClub;
@@ -119,14 +118,6 @@ public class Student {
         this.dormitoryRoom = dormitoryRoom;
     }
 
-    public Boolean getIsLeaveSchool() {
-        return isLeaveSchool;
-    }
-
-    public void setIsLeaveSchool(Boolean isLeaveSchool) {
-        this.isLeaveSchool = isLeaveSchool;
-    }
-
     public Club getMajorClub() {
         return majorClub;
     }
@@ -166,7 +157,6 @@ public class Student {
                 ", role=" + role +
                 ", dormitoryFloor=" + dormitoryFloor +
                 ", dormitoryRoom=" + dormitoryRoom +
-                ", isLeaveSchool=" + isLeaveSchool +
                 ", majorClub=" + majorClub +
                 ", jobClub=" + jobClub +
                 ", autonomousClub=" + autonomousClub +
