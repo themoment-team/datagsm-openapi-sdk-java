@@ -8,4 +8,5 @@ public enum StudentRole {
     STUDENT_COUNCIL,
     DORMITORY_MANAGER,
     GRADUATE,
+    WITHDRAWN,
 }
