@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "team.themoment.datagsm.sdk"
-version = "1.0.0-M8"
+version = "1.1.0"
 
 java {
     toolchain {
