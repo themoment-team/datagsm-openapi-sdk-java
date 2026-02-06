@@ -73,9 +73,6 @@ public class StudentApiImpl implements StudentApi {
         if (request.getDormitoryRoom() != null) {
             params.put("dormitoryRoom", request.getDormitoryRoom().toString());
         }
-        if (request.getIsLeaveSchool() != null) {
-            params.put("isLeaveSchool", request.getIsLeaveSchool().toString());
-        }
         if (request.getIsGraduated() != null) {
             params.put("isGraduated", request.getIsGraduated().toString());
         }

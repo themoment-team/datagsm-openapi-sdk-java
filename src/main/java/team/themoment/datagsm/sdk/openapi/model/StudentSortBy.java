@@ -57,10 +57,5 @@ public enum StudentSortBy {
     /**
      * 기숙사 방 번호로 정렬
      */
-    DORMITORY_ROOM,
-
-    /**
-     * 자퇴 여부로 정렬
-     */
-    IS_LEAVE_SCHOOL
+    DORMITORY_ROOM
 }
