@@ -2,69 +2,65 @@ package team.themoment.datagsm.sdk.openapi;
 
 import team.themoment.datagsm.sdk.openapi.client.*;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
+import team.themoment.datagsm.sdk.openapi.http.OkHttpClientImpl;
 
 /**
  * DataGSM OpenAPI 메인 클라이언트
- *
- * @deprecated {@link DataGsmOpenApiClient}를 사용하세요.
  */
-@Deprecated(since = "1.1.1", forRemoval = true)
-public class DataGsmClient implements AutoCloseable {
-    private final DataGsmOpenApiClient delegate;
+public class DataGsmOpenApiClient implements AutoCloseable {
+    private static final String DEFAULT_BASE_URL = "https://openapi.data.hellogsm.kr";
 
-    private DataGsmClient(Builder builder) {
-        DataGsmOpenApiClient.Builder delegateBuilder = DataGsmOpenApiClient.builder(builder.apiKey);
-        if (builder.baseUrl != null) {
-            delegateBuilder.baseUrl(builder.baseUrl);
-        }
-        if (builder.httpClient != null) {
-            delegateBuilder.httpClient(builder.httpClient);
-        }
-        this.delegate = delegateBuilder.build();
+    private final HttpClient httpClient;
+    private final StudentApi studentApi;
+    private final ClubApi clubApi;
+    private final NeisApi neisApi;
+    private final ProjectApi projectApi;
+
+    private DataGsmOpenApiClient(Builder builder) {
+        this.httpClient = builder.httpClient != null ? builder.httpClient : new OkHttpClientImpl();
+
+        String baseUrl = builder.baseUrl != null ? builder.baseUrl : DEFAULT_BASE_URL;
+
+        this.studentApi = new StudentApiImpl(httpClient, builder.apiKey, baseUrl);
+        this.clubApi = new ClubApiImpl(httpClient, builder.apiKey, baseUrl);
+        this.neisApi = new NeisApiImpl(httpClient, builder.apiKey, baseUrl);
+        this.projectApi = new ProjectApiImpl(httpClient, builder.apiKey, baseUrl);
     }
 
     /**
      * 학생 API 반환
      *
      * @return 학생 API
-     * @deprecated {@link DataGsmOpenApiClient#students()}를 사용하세요.
      */
-    @Deprecated
     public StudentApi students() {
-        return delegate.students();
+        return studentApi;
     }
 
     /**
      * 동아리 API 반환
      *
      * @return 동아리 API
-     * @deprecated {@link DataGsmOpenApiClient#clubs()}를 사용하세요.
      */
-    @Deprecated
     public ClubApi clubs() {
-        return delegate.clubs();
+        return clubApi;
     }
 
     /**
      * NEIS API 반환
      *
      * @return NEIS API
-     * @deprecated {@link DataGsmOpenApiClient#neis()}를 사용하세요.
      */
-    @Deprecated
     public NeisApi neis() {
-        return delegate.neis();
+        return neisApi;
     }
 
     /**
      * 프로젝트 API 반환
      *
      * @return 프로젝트 API
-     * @deprecated {@link DataGsmOpenApiClient#projects()}를 사용하세요.
      */
-    @Deprecated
     public ProjectApi projects() {
-        return delegate.projects();
+        return projectApi;
     }
 
     /**
@@ -72,27 +68,24 @@ public class DataGsmClient implements AutoCloseable {
      */
     @Override
     public void close() {
-        delegate.close();
+        if (httpClient != null) {
+            httpClient.close();
+        }
     }
 
     /**
-     * DataGsmClient 빌더
+     * DataGsmOpenApiClient 빌더
      *
      * @param apiKey API 키
      * @return 빌더
-     * @deprecated {@link DataGsmOpenApiClient#builder(String)}를 사용하세요.
      */
-    @Deprecated
     public static Builder builder(String apiKey) {
         return new Builder(apiKey);
     }
 
     /**
      * 빌더 클래스
-     *
-     * @deprecated {@link DataGsmOpenApiClient.Builder}를 사용하세요.
      */
-    @Deprecated
     public static class Builder {
         private final String apiKey;
         private String baseUrl;
@@ -110,9 +103,7 @@ public class DataGsmClient implements AutoCloseable {
          *
          * @param baseUrl 베이스 URL
          * @return 빌더
-         * @deprecated {@link DataGsmOpenApiClient.Builder#baseUrl(String)}를 사용하세요.
          */
-        @Deprecated
         public Builder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
             return this;
@@ -123,23 +114,19 @@ public class DataGsmClient implements AutoCloseable {
          *
          * @param httpClient HTTP 클라이언트
          * @return 빌더
-         * @deprecated {@link DataGsmOpenApiClient.Builder#httpClient(HttpClient)}를 사용하세요.
          */
-        @Deprecated
         public Builder httpClient(HttpClient httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
         /**
-         * DataGsmClient 생성
+         * DataGsmOpenApiClient 생성
          *
-         * @return DataGsmClient
-         * @deprecated {@link DataGsmOpenApiClient.Builder#build()}를 사용하세요.
+         * @return DataGsmOpenApiClient
          */
-        @Deprecated
-        public DataGsmClient build() {
-            return new DataGsmClient(this);
+        public DataGsmOpenApiClient build() {
+            return new DataGsmOpenApiClient(this);
         }
     }
 }
