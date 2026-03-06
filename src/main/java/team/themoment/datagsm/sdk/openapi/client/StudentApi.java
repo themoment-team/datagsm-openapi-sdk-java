@@ -35,7 +35,7 @@ public interface StudentApi {
         private Sex sex;
         private StudentRole role;
         private Integer dormitoryRoom;
-        private Boolean isGraduate;
+        private EnrollmentFilter enrollmentFilter;
         private Integer page;
         private Integer size;
         private StudentSortBy sortBy;
@@ -92,8 +92,8 @@ public interface StudentApi {
             return this;
         }
 
-        public StudentRequest isGraduate(Boolean isGraduate) {
-            this.isGraduate = isGraduate;
+        public StudentRequest enrollmentFilter(EnrollmentFilter enrollmentFilter) {
+            this.enrollmentFilter = enrollmentFilter;
             return this;
         }
 
@@ -153,8 +153,8 @@ public interface StudentApi {
             return dormitoryRoom;
         }
 
-        public Boolean getIsGraduated() {
-            return isGraduate;
+        public EnrollmentFilter getEnrollmentFilter() {
+            return enrollmentFilter;
         }
 
         public Integer getPage() {
