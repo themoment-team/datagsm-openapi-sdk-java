@@ -19,7 +19,6 @@ public class Student {
     private Integer dormitoryFloor;
     private Integer dormitoryRoom;
     private Club majorClub;
-    private Club jobClub;
     private Club autonomousClub;
 
     public Student() {}
@@ -128,14 +127,6 @@ public class Student {
         this.majorClub = majorClub;
     }
 
-    public Optional<Club> getJobClub() {
-        return Optional.ofNullable(jobClub);
-    }
-
-    public void setJobClub(Club jobClub) {
-        this.jobClub = jobClub;
-    }
-
     public Optional<Club> getAutonomousClub() {
         return Optional.ofNullable(autonomousClub);
     }
@@ -160,7 +151,6 @@ public class Student {
                 ", dormitoryFloor=" + dormitoryFloor +
                 ", dormitoryRoom=" + dormitoryRoom +
                 ", majorClub=" + majorClub +
-                ", jobClub=" + jobClub +
                 ", autonomousClub=" + autonomousClub +
                 '}';
     }
