@@ -5,6 +5,5 @@ package team.themoment.datagsm.sdk.openapi.model;
  */
 public enum ClubType {
     MAJOR_CLUB,
-    JOB_CLUB,
     AUTONOMOUS_CLUB
 }
