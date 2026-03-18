@@ -43,4 +43,4 @@ dependencies {
 ```
 
 ### 사용법
-자세한 사용법은 [기술 문서](https://docs.themoment.io/datagsm/openapi/sdk/java)를 참고하십시오.
+자세한 사용법은 [기술 문서](https://datagsm-front-docs.vercel.app/api/sdk/java)를 참고하십시오.
