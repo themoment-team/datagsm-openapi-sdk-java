@@ -7,6 +7,8 @@ public class Club {
     private Long id;
     private String name;
     private ClubType type;
+    private ClubStatus status;
+    private Integer foundedYear;
 
     public Club() {}
 
@@ -40,12 +42,30 @@ public class Club {
         this.type = type;
     }
 
+    public ClubStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ClubStatus status) {
+        this.status = status;
+    }
+
+    public Integer getFoundedYear() {
+        return foundedYear;
+    }
+
+    public void setFoundedYear(Integer foundedYear) {
+        this.foundedYear = foundedYear;
+    }
+
     @Override
     public String toString() {
         return "Club{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", type=" + type +
+                ", status=" + status +
+                ", foundedYear=" + foundedYear +
                 '}';
     }
 }

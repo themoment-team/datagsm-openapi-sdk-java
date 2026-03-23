@@ -17,5 +17,20 @@ public enum ClubSortBy {
     /**
      * 타입으로 정렬
      */
-    TYPE
+    TYPE,
+
+    /**
+     * 설립연도로 정렬
+     */
+    FOUNDED_YEAR,
+
+    /**
+     * 폐지연도로 정렬
+     */
+    ABOLISHED_YEAR,
+
+    /**
+     * 운영 상태로 정렬
+     */
+    STATUS
 }
