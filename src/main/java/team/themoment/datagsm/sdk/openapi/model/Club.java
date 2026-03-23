@@ -1,5 +1,7 @@
 package team.themoment.datagsm.sdk.openapi.model;
 
+import java.util.Optional;
+
 /**
  * 동아리 정보 (간단 버전)
  */
@@ -9,6 +11,7 @@ public class Club {
     private ClubType type;
     private ClubStatus status;
     private Integer foundedYear;
+    private Integer abolishedYear;
 
     public Club() {}
 
@@ -58,6 +61,14 @@ public class Club {
         this.foundedYear = foundedYear;
     }
 
+    public Optional<Integer> getAbolishedYear() {
+        return Optional.ofNullable(abolishedYear);
+    }
+
+    public void setAbolishedYear(Integer abolishedYear) {
+        this.abolishedYear = abolishedYear;
+    }
+
     @Override
     public String toString() {
         return "Club{" +
@@ -66,6 +77,7 @@ public class Club {
                 ", type=" + type +
                 ", status=" + status +
                 ", foundedYear=" + foundedYear +
+                ", abolishedYear=" + abolishedYear +
                 '}';
     }
 }
