@@ -29,6 +29,8 @@ public interface ClubApi {
         private Long clubId;
         private String clubName;
         private ClubType clubType;
+        private ClubStatus status;
+        private Integer foundedYear;
         private Integer page;
         private Integer size;
         private Boolean includeLeaderInParticipants;
@@ -54,6 +56,16 @@ public interface ClubApi {
 
         public ClubRequest clubType(ClubType clubType) {
             this.clubType = clubType;
+            return this;
+        }
+
+        public ClubRequest status(ClubStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public ClubRequest foundedYear(Integer foundedYear) {
+            this.foundedYear = foundedYear;
             return this;
         }
 
@@ -92,6 +104,14 @@ public interface ClubApi {
 
         public ClubType getClubType() {
             return clubType;
+        }
+
+        public ClubStatus getStatus() {
+            return status;
+        }
+
+        public Integer getFoundedYear() {
+            return foundedYear;
         }
 
         public Integer getPage() {

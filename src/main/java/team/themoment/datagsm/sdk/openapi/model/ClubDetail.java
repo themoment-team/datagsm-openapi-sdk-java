@@ -11,6 +11,9 @@ public class ClubDetail {
     private Long id;
     private String name;
     private ClubType type;
+    private ClubStatus status;
+    private Integer foundedYear;
+    private Integer abolishedYear;
     private ParticipantInfo leader;
     private List<ParticipantInfo> participants = new ArrayList<>();
 
@@ -40,6 +43,34 @@ public class ClubDetail {
         this.type = type;
     }
 
+    public ClubStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ClubStatus status) {
+        this.status = status;
+    }
+
+    public Integer getFoundedYear() {
+        return foundedYear;
+    }
+
+    public void setFoundedYear(Integer foundedYear) {
+        this.foundedYear = foundedYear;
+    }
+
+    /**
+     * 동아리 폐지연도를 반환합니다.
+     * 운영 중인 동아리인 경우 비어 있을 수 있습니다.
+     */
+    public Optional<Integer> getAbolishedYear() {
+        return Optional.ofNullable(abolishedYear);
+    }
+
+    public void setAbolishedYear(Integer abolishedYear) {
+        this.abolishedYear = abolishedYear;
+    }
+
     /**
      * 동아리 부장 정보를 반환합니다.
      * 부장이 자퇴 또는 졸업 처리된 경우 비어 있을 수 있습니다.
@@ -66,6 +97,9 @@ public class ClubDetail {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", type=" + type +
+                ", status=" + status +
+                ", foundedYear=" + foundedYear +
+                ", abolishedYear=" + abolishedYear +
                 ", leader=" + leader +
                 ", participants=" + participants +
                 '}';

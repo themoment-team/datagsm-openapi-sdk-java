@@ -58,6 +58,12 @@ public class ClubApiImpl implements ClubApi {
         if (request.getClubType() != null) {
             params.put("clubType", request.getClubType().name());
         }
+        if (request.getStatus() != null) {
+            params.put("status", request.getStatus().name());
+        }
+        if (request.getFoundedYear() != null) {
+            params.put("foundedYear", request.getFoundedYear().toString());
+        }
         if (request.getPage() != null) {
             params.put("page", request.getPage().toString());
         }
