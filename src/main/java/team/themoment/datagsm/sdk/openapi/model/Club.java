@@ -61,6 +61,10 @@ public class Club {
         this.foundedYear = foundedYear;
     }
 
+    /**
+     * 동아리 폐지연도를 반환합니다.
+     * 운영 중인 동아리인 경우 비어 있을 수 있습니다.
+     */
     public Optional<Integer> getAbolishedYear() {
         return Optional.ofNullable(abolishedYear);
     }
