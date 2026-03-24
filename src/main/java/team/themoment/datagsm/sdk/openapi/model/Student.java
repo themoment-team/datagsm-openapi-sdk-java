@@ -15,6 +15,7 @@ public class Student {
     private Integer number;
     private Integer studentNumber;
     private Major major;
+    private String specialty;
     private StudentRole role;
     private Integer dormitoryFloor;
     private Integer dormitoryRoom;
@@ -95,6 +96,14 @@ public class Student {
         this.major = major;
     }
 
+    public Optional<String> getSpecialty() {
+        return Optional.ofNullable(specialty);
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
     public StudentRole getRole() {
         return role;
     }
@@ -147,6 +156,7 @@ public class Student {
                 ", number=" + number +
                 ", studentNumber=" + studentNumber +
                 ", major=" + major +
+                ", specialty='" + specialty + '\'' +
                 ", role=" + role +
                 ", dormitoryFloor=" + dormitoryFloor +
                 ", dormitoryRoom=" + dormitoryRoom +

@@ -35,6 +35,7 @@ public interface StudentApi {
         private Sex sex;
         private StudentRole role;
         private Integer dormitoryRoom;
+        private String specialty;
         private EnrollmentFilter enrollmentFilter;
         private Integer page;
         private Integer size;
@@ -89,6 +90,11 @@ public interface StudentApi {
 
         public StudentRequest dormitoryRoom(Integer dormitoryRoom) {
             this.dormitoryRoom = dormitoryRoom;
+            return this;
+        }
+
+        public StudentRequest specialty(String specialty) {
+            this.specialty = specialty;
             return this;
         }
 
@@ -151,6 +157,10 @@ public interface StudentApi {
 
         public Integer getDormitoryRoom() {
             return dormitoryRoom;
+        }
+
+        public String getSpecialty() {
+            return specialty;
         }
 
         public EnrollmentFilter getEnrollmentFilter() {
