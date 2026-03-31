@@ -21,6 +21,8 @@ public class Student {
     private Integer dormitoryRoom;
     private Club majorClub;
     private Club autonomousClub;
+    private String githubId;
+    private String githubUrl;
 
     public Student() {}
 
@@ -144,6 +146,22 @@ public class Student {
         this.autonomousClub = autonomousClub;
     }
 
+    public Optional<String> getGithubId() {
+        return Optional.ofNullable(githubId);
+    }
+
+    public void setGithubId(String githubId) {
+        this.githubId = githubId;
+    }
+
+    public Optional<String> getGithubUrl() {
+        return Optional.ofNullable(githubUrl);
+    }
+
+    public void setGithubUrl(String githubUrl) {
+        this.githubUrl = githubUrl;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -162,6 +180,8 @@ public class Student {
                 ", dormitoryRoom=" + dormitoryRoom +
                 ", majorClub=" + majorClub +
                 ", autonomousClub=" + autonomousClub +
+                ", githubId='" + githubId + '\'' +
+                ", githubUrl='" + githubUrl + '\'' +
                 '}';
     }
 }
