@@ -8,7 +8,7 @@ import team.themoment.datagsm.sdk.openapi.http.OkHttpClientImpl;
  * DataGSM OpenAPI 메인 클라이언트
  */
 public class DataGsmOpenApiClient implements AutoCloseable {
-    private static final String DEFAULT_BASE_URL = "https://openapi.data.hellogsm.kr";
+    private static final String DEFAULT_BASE_URL = "https://openapi.datagsm.kr";
 
     private final HttpClient httpClient;
     private final StudentApi studentApi;
