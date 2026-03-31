@@ -16,7 +16,7 @@ DataGSM의 OpenAPI를 추상화된 환경에서 제공합니다.
 <dependency>
     <groupId>com.github.themoment-team</groupId>
     <artifactId>datagsm-openapi-sdk-java</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
 </dependency>
 ```
 ### 설치 - Gradle
@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.themoment-team:datagsm-openapi-sdk-java:1.5.0'
+    implementation 'com.github.themoment-team:datagsm-openapi-sdk-java:1.5.1'
 }
 ```
 
@@ -38,9 +38,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.themoment-team:datagsm-openapi-sdk-java:1.5.0")
+    implementation("com.github.themoment-team:datagsm-openapi-sdk-java:1.5.1")
 }
 ```
 
 ### 사용법
-자세한 사용법은 [기술 문서](https://datagsm-front-docs.vercel.app/api/sdk/java)를 참고하십시오.
+자세한 사용법은 [기술 문서](https://docs.datagsm.kr/api/sdk/java)를 참고하십시오.
