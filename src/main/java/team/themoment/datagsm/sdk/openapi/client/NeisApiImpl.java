@@ -32,9 +32,9 @@ public class NeisApiImpl implements NeisApi {
         Map<String, String> queryParams = buildMealQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/neis/meals", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<List<Meal>>>(){}.getType();
-        CommonApiResponse<List<Meal>> apiResponse = JsonUtil.fromJson(responseBody, type);
-        return apiResponse.getData();
+        Type type = new TypeToken<CommonApiResponse<MealResponseWrapper>>(){}.getType();
+        CommonApiResponse<MealResponseWrapper> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData().meals;
     }
 
     @Override
@@ -43,9 +43,20 @@ public class NeisApiImpl implements NeisApi {
         Map<String, String> queryParams = buildScheduleQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/neis/schedules", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<List<Schedule>>>(){}.getType();
-        CommonApiResponse<List<Schedule>> apiResponse = JsonUtil.fromJson(responseBody, type);
-        return apiResponse.getData();
+        Type type = new TypeToken<CommonApiResponse<ScheduleResponseWrapper>>(){}.getType();
+        CommonApiResponse<ScheduleResponseWrapper> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData().schedules;
+    }
+
+    @Override
+    public List<Timetable> getTimetables(TimetableRequest request) {
+        Map<String, String> headers = createHeaders();
+        Map<String, String> queryParams = buildTimetableQueryParams(request);
+
+        String responseBody = httpClient.get(baseUrl + "/v1/neis/timetables", headers, queryParams);
+        Type type = new TypeToken<CommonApiResponse<TimetableResponseWrapper>>(){}.getType();
+        CommonApiResponse<TimetableResponseWrapper> apiResponse = JsonUtil.fromJson(responseBody, type);
+        return apiResponse.getData().timetables;
     }
 
     private Map<String, String> buildMealQueryParams(MealRequest request) {
@@ -80,9 +91,40 @@ public class NeisApiImpl implements NeisApi {
         return params;
     }
 
+    private Map<String, String> buildTimetableQueryParams(TimetableRequest request) {
+        Map<String, String> params = new HashMap<>();
+
+        params.put("grade", String.valueOf(request.getGrade()));
+        params.put("classNum", String.valueOf(request.getClassNum()));
+
+        if (request.getDate() != null) {
+            params.put("date", request.getDate().format(DATE_FORMATTER));
+        }
+        if (request.getFromDate() != null) {
+            params.put("fromDate", request.getFromDate().format(DATE_FORMATTER));
+        }
+        if (request.getToDate() != null) {
+            params.put("toDate", request.getToDate().format(DATE_FORMATTER));
+        }
+
+        return params;
+    }
+
     private Map<String, String> createHeaders() {
         Map<String, String> headers = new HashMap<>();
         headers.put("X-API-KEY", apiKey);
         return headers;
+    }
+
+    private static class MealResponseWrapper {
+        List<Meal> meals;
+    }
+
+    private static class ScheduleResponseWrapper {
+        List<Schedule> schedules;
+    }
+
+    private static class TimetableResponseWrapper {
+        List<Timetable> timetables;
     }
 }

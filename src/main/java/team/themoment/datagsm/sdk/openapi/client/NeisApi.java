@@ -25,6 +25,14 @@ public interface NeisApi {
     List<Schedule> getSchedules(ScheduleRequest request);
 
     /**
+     * 시간표 정보 조회
+     *
+     * @param request 조회 조건
+     * @return 시간표 목록
+     */
+    List<Timetable> getTimetables(TimetableRequest request);
+
+    /**
      * 급식 요청 파라미터 빌더
      */
     class MealRequest {
@@ -47,6 +55,57 @@ public interface NeisApi {
         public MealRequest toDate(LocalDate toDate) {
             this.toDate = toDate;
             return this;
+        }
+
+        public LocalDate getDate() {
+            return date;
+        }
+
+        public LocalDate getFromDate() {
+            return fromDate;
+        }
+
+        public LocalDate getToDate() {
+            return toDate;
+        }
+    }
+
+    /**
+     * 시간표 요청 파라미터 빌더
+     */
+    class TimetableRequest {
+        private final int grade;
+        private final int classNum;
+        private LocalDate date;
+        private LocalDate fromDate;
+        private LocalDate toDate;
+
+        public TimetableRequest(int grade, int classNum) {
+            this.grade = grade;
+            this.classNum = classNum;
+        }
+
+        public TimetableRequest date(LocalDate date) {
+            this.date = date;
+            return this;
+        }
+
+        public TimetableRequest fromDate(LocalDate fromDate) {
+            this.fromDate = fromDate;
+            return this;
+        }
+
+        public TimetableRequest toDate(LocalDate toDate) {
+            this.toDate = toDate;
+            return this;
+        }
+
+        public int getGrade() {
+            return grade;
+        }
+
+        public int getClassNum() {
+            return classNum;
         }
 
         public LocalDate getDate() {
