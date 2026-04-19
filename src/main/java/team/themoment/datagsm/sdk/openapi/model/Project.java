@@ -11,6 +11,9 @@ public class Project {
     private Long id;
     private String name;
     private String description;
+    private int startYear;
+    private Integer endYear;
+    private ProjectStatus status;
     private Club club;
     private List<ParticipantInfo> participants = new ArrayList<>();
 
@@ -40,6 +43,30 @@ public class Project {
         this.description = description;
     }
 
+    public int getStartYear() {
+        return startYear;
+    }
+
+    public void setStartYear(int startYear) {
+        this.startYear = startYear;
+    }
+
+    public Optional<Integer> getEndYear() {
+        return Optional.ofNullable(endYear);
+    }
+
+    public void setEndYear(Integer endYear) {
+        this.endYear = endYear;
+    }
+
+    public ProjectStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProjectStatus status) {
+        this.status = status;
+    }
+
     public Optional<Club> getClub() {
         return Optional.ofNullable(club);
     }
@@ -62,6 +89,9 @@ public class Project {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", startYear=" + startYear +
+                ", endYear=" + endYear +
+                ", status=" + status +
                 ", club=" + club +
                 ", participants=" + participants +
                 '}';
