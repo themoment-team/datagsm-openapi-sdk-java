@@ -4,28 +4,44 @@ plugins {
 }
 
 group = "team.themoment.datagsm.sdk"
-version = "1.7.0"
+version = "2.0.0"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
-    sourceCompatibility = JavaVersion.VERSION_13
-    targetCompatibility = JavaVersion.VERSION_13
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
     withJavadocJar()
 }
 
+val gprUser: String = (findProperty("gpr.user") as String?) ?: System.getenv("GITHUB_ACTOR") ?: ""
+val gprToken: String = (findProperty("gpr.token") as String?) ?: System.getenv("GITHUB_TOKEN") ?: ""
+
 repositories {
     mavenCentral()
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/themoment-team/datagsm-server")
+        credentials {
+            username = gprUser
+            password = gprToken
+        }
+    }
 }
 
 dependencies {
+    // Shared types from datagsm-server
+    implementation("team.themoment:datagsm-shared-jvm:20260514-2")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+
     // HTTP Client
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    // JSON Processing
-    implementation("com.google.code.gson:gson:2.11.0")
+    // JSON Processing (Jackson + Kotlin support)
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.3")
 
     // Testing
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
@@ -78,7 +94,7 @@ publishing {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-    options.release.set(13)
+    options.release.set(17)
 }
 
 tasks.withType<Javadoc> {
