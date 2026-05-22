@@ -1,30 +1,15 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
-import team.themoment.datagsm.sdk.openapi.model.*;
+import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResDto;
+import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
+import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectSortBy;
 
-/**
- * 프로젝트 데이터 API 인터페이스
- */
 public interface ProjectApi {
-    /**
-     * 프로젝트 목록 조회
-     *
-     * @param request 조회 조건
-     * @return 프로젝트 응답
-     */
-    ProjectResponse getProjects(ProjectRequest request);
+    ProjectListResDto getProjects(ProjectRequest request);
 
-    /**
-     * 특정 프로젝트 조회
-     *
-     * @param projectId 프로젝트 ID
-     * @return 프로젝트 정보
-     */
-    Project getProject(Long projectId);
+    ProjectResDto getProject(Long projectId);
 
-    /**
-     * 프로젝트 요청 파라미터 빌더
-     */
     class ProjectRequest {
         private Long projectId;
         private String projectName;
@@ -75,32 +60,12 @@ public interface ProjectApi {
             return this;
         }
 
-        public Long getProjectId() {
-            return projectId;
-        }
-
-        public String getProjectName() {
-            return projectName;
-        }
-
-        public Long getClubId() {
-            return clubId;
-        }
-
-        public Integer getPage() {
-            return page;
-        }
-
-        public Integer getSize() {
-            return size;
-        }
-
-        public ProjectSortBy getSortBy() {
-            return sortBy;
-        }
-
-        public SortDirection getSortDirection() {
-            return sortDirection;
-        }
+        public Long getProjectId() { return projectId; }
+        public String getProjectName() { return projectName; }
+        public Long getClubId() { return clubId; }
+        public Integer getPage() { return page; }
+        public Integer getSize() { return size; }
+        public ProjectSortBy getSortBy() { return sortBy; }
+        public SortDirection getSortDirection() { return sortDirection; }
     }
 }
