@@ -54,6 +54,17 @@ tasks.test {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/themoment-team/datagsm-openapi-sdk-java")
+            credentials {
+                username = gprUser
+                password = gprToken
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
