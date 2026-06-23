@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     // Shared types from datagsm-server
-    implementation("team.themoment:datagsm-shared-jvm:20260514-2")
+    implementation("team.themoment:datagsm-shared-jvm:20260618-38")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // HTTP Client
