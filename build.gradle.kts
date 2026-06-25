@@ -32,8 +32,8 @@ repositories {
 }
 
 dependencies {
-    // Shared types from datagsm-server
-    implementation("team.themoment:datagsm-shared-jvm:20260618-38")
+    // Shared types from datagsm-server (api: 반환 타입이 공개 API에 노출되므로 소비자 컴파일 클래스패스에 포함)
+    api("team.themoment:datagsm-shared-jvm:20260618-38")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     // HTTP Client
