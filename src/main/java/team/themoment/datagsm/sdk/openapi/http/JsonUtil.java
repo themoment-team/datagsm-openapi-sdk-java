@@ -1,12 +1,15 @@
 package team.themoment.datagsm.sdk.openapi.http;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import kotlinx.datetime.LocalDate;
 import team.themoment.datagsm.sdk.openapi.exception.DataGsmException;
@@ -24,6 +27,13 @@ public class JsonUtil {
             public LocalDate deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
                 java.time.LocalDate javaDate = java.time.LocalDate.parse(p.getText());
                 return LocalDate.Companion.fromEpochDays((int) javaDate.toEpochDay());
+            }
+        });
+        // kotlinx.datetime.LocalDate.toString() returns ISO-8601 (e.g. "2026-06-24")
+        kotlinDatetimeModule.addSerializer(LocalDate.class, new StdSerializer<LocalDate>(LocalDate.class) {
+            @Override
+            public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+                gen.writeString(value.toString());
             }
         });
 
