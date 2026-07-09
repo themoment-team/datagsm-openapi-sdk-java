@@ -1,17 +1,15 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
-import team.themoment.datagsm.sdk.openapi.model.*;
+import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResDto;
+import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 프로젝트 데이터 API 구현
- */
 public class ProjectApiImpl implements ProjectApi {
     private final HttpClient httpClient;
     private final String apiKey;
@@ -24,25 +22,26 @@ public class ProjectApiImpl implements ProjectApi {
     }
 
     @Override
-    public ProjectResponse getProjects(ProjectRequest request) {
+    public ProjectListResDto getProjects(ProjectRequest request) {
         Map<String, String> headers = createHeaders();
         Map<String, String> queryParams = buildProjectQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/projects", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<ProjectResponse>>(){}.getType();
-        CommonApiResponse<ProjectResponse> apiResponse = JsonUtil.fromJson(responseBody, type);
+        CommonApiResponse<ProjectListResDto> apiResponse = JsonUtil.fromJson(
+                responseBody, new TypeReference<CommonApiResponse<ProjectListResDto>>() {}
+        );
         return apiResponse.getData();
     }
 
     @Override
-    public Project getProject(Long projectId) {
+    public ProjectResDto getProject(Long projectId) {
         ProjectRequest request = new ProjectRequest().projectId(projectId);
-        ProjectResponse response = getProjects(request);
+        ProjectListResDto response = getProjects(request);
 
-        if (response.getProjects() != null && !response.getProjects().isEmpty()) {
-            return response.getProjects().get(0);
+        ProjectResDto[] projects = response.getProjects();
+        if (projects != null && projects.length > 0) {
+            return projects[0];
         }
-
         return null;
     }
 

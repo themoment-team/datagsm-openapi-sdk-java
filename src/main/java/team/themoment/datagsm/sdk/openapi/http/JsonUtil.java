@@ -1,76 +1,67 @@
 package team.themoment.datagsm.sdk.openapi.http;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.module.kotlin.KotlinModule;
+import kotlinx.datetime.LocalDate;
 import team.themoment.datagsm.sdk.openapi.exception.DataGsmException;
 
-import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 
-/**
- * JSON 직렬화/역직렬화 유틸리티
- */
 public class JsonUtil {
-    private static final Gson GSON;
+    private static final ObjectMapper OBJECT_MAPPER;
 
     static {
-        GsonBuilder builder = new GsonBuilder();
+        SimpleModule kotlinDatetimeModule = new SimpleModule();
+        // kotlinx.datetime.LocalDate.parse(String) is synthetic — use fromEpochDays conversion instead
+        kotlinDatetimeModule.addDeserializer(LocalDate.class, new StdDeserializer<LocalDate>(LocalDate.class) {
+            @Override
+            public LocalDate deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+                java.time.LocalDate javaDate = java.time.LocalDate.parse(p.getText());
+                return LocalDate.Companion.fromEpochDays((int) javaDate.toEpochDay());
+            }
+        });
+        // kotlinx.datetime.LocalDate.toString() returns ISO-8601 (e.g. "2026-06-24")
+        kotlinDatetimeModule.addSerializer(LocalDate.class, new StdSerializer<LocalDate>(LocalDate.class) {
+            @Override
+            public void serialize(LocalDate value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+                gen.writeString(value.toString());
+            }
+        });
 
-        // LocalDate 처리
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        JsonDeserializer<LocalDate> dateDeserializer = (json, typeOfT, context) ->
-                LocalDate.parse(json.getAsString(), dateFormatter);
-
-        builder.registerTypeAdapter(LocalDate.class, dateDeserializer);
-        builder.registerTypeAdapter(LocalDate.class, (com.google.gson.JsonSerializer<LocalDate>)
-                (src, typeOfSrc, context) -> context.serialize(src.format(dateFormatter)));
-
-        GSON = builder.create();
+        OBJECT_MAPPER = new ObjectMapper()
+                .registerModule(new KotlinModule.Builder().build())
+                .registerModule(kotlinDatetimeModule)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    /**
-     * JSON 문자열을 객체로 변환
-     *
-     * @param json JSON 문자열
-     * @param clazz 대상 클래스
-     * @param <T> 타입
-     * @return 변환된 객체
-     */
+    public static <T> T fromJson(String json, TypeReference<T> typeRef) {
+        try {
+            return OBJECT_MAPPER.readValue(json, typeRef);
+        } catch (Exception e) {
+            throw new DataGsmException("Failed to deserialize JSON: " + e.getMessage(), e);
+        }
+    }
+
     public static <T> T fromJson(String json, Class<T> clazz) {
         try {
-            return GSON.fromJson(json, clazz);
+            return OBJECT_MAPPER.readValue(json, clazz);
         } catch (Exception e) {
             throw new DataGsmException("Failed to deserialize JSON: " + e.getMessage(), e);
         }
     }
 
-    /**
-     * JSON 문자열을 객체로 변환 (제네릭 타입)
-     *
-     * @param json JSON 문자열
-     * @param type 대상 타입
-     * @param <T> 타입
-     * @return 변환된 객체
-     */
-    public static <T> T fromJson(String json, Type type) {
-        try {
-            return GSON.fromJson(json, type);
-        } catch (Exception e) {
-            throw new DataGsmException("Failed to deserialize JSON: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * 객체를 JSON 문자열로 변환
-     *
-     * @param obj 변환할 객체
-     * @return JSON 문자열
-     */
     public static String toJson(Object obj) {
         try {
-            return GSON.toJson(obj);
+            return OBJECT_MAPPER.writeValueAsString(obj);
         } catch (Exception e) {
             throw new DataGsmException("Failed to serialize JSON: " + e.getMessage(), e);
         }

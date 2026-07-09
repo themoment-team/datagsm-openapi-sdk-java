@@ -1,30 +1,18 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
-import team.themoment.datagsm.sdk.openapi.model.*;
+import team.themoment.datagsm.sdk.openapi.model.EnrollmentFilter;
+import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResDto;
+import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
+import team.themoment.datagsm.shared.domain.student.entity.constant.Sex;
+import team.themoment.datagsm.shared.domain.student.entity.constant.StudentRole;
+import team.themoment.datagsm.shared.domain.student.entity.constant.StudentSortBy;
 
-/**
- * 학생 데이터 API 인터페이스
- */
 public interface StudentApi {
-    /**
-     * 학생 목록 조회
-     *
-     * @param request 조회 조건
-     * @return 학생 응답
-     */
-    StudentResponse getStudents(StudentRequest request);
+    StudentListResDto getStudents(StudentRequest request);
 
-    /**
-     * 특정 학생 조회
-     *
-     * @param studentId 학생 ID
-     * @return 학생 정보
-     */
-    Student getStudent(Long studentId);
+    StudentResDto getStudent(Long studentId);
 
-    /**
-     * 학생 요청 파라미터 빌더
-     */
     class StudentRequest {
         private Long studentId;
         private String name;
@@ -123,64 +111,20 @@ public interface StudentApi {
             return this;
         }
 
-        public Long getStudentId() {
-            return studentId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public Integer getGrade() {
-            return grade;
-        }
-
-        public Integer getClassNum() {
-            return classNum;
-        }
-
-        public Integer getNumber() {
-            return number;
-        }
-
-        public Sex getSex() {
-            return sex;
-        }
-
-        public StudentRole getRole() {
-            return role;
-        }
-
-        public Integer getDormitoryRoom() {
-            return dormitoryRoom;
-        }
-
-        public String getSpecialty() {
-            return specialty;
-        }
-
-        public EnrollmentFilter getEnrollmentFilter() {
-            return enrollmentFilter;
-        }
-
-        public Integer getPage() {
-            return page;
-        }
-
-        public Integer getSize() {
-            return size;
-        }
-
-        public StudentSortBy getSortBy() {
-            return sortBy;
-        }
-
-        public SortDirection getSortDirection() {
-            return sortDirection;
-        }
+        public Long getStudentId() { return studentId; }
+        public String getName() { return name; }
+        public String getEmail() { return email; }
+        public Integer getGrade() { return grade; }
+        public Integer getClassNum() { return classNum; }
+        public Integer getNumber() { return number; }
+        public Sex getSex() { return sex; }
+        public StudentRole getRole() { return role; }
+        public Integer getDormitoryRoom() { return dormitoryRoom; }
+        public String getSpecialty() { return specialty; }
+        public EnrollmentFilter getEnrollmentFilter() { return enrollmentFilter; }
+        public Integer getPage() { return page; }
+        public Integer getSize() { return size; }
+        public StudentSortBy getSortBy() { return sortBy; }
+        public SortDirection getSortDirection() { return sortDirection; }
     }
 }

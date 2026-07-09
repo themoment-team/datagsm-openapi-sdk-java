@@ -1,17 +1,15 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
-import team.themoment.datagsm.sdk.openapi.model.*;
+import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.shared.domain.club.dto.response.ClubListResDto;
+import team.themoment.datagsm.shared.domain.club.dto.response.ClubResDto;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 동아리 데이터 API 구현
- */
 public class ClubApiImpl implements ClubApi {
     private final HttpClient httpClient;
     private final String apiKey;
@@ -24,25 +22,26 @@ public class ClubApiImpl implements ClubApi {
     }
 
     @Override
-    public ClubResponse getClubs(ClubRequest request) {
+    public ClubListResDto getClubs(ClubRequest request) {
         Map<String, String> headers = createHeaders();
         Map<String, String> queryParams = buildClubQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/clubs", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<ClubResponse>>(){}.getType();
-        CommonApiResponse<ClubResponse> apiResponse = JsonUtil.fromJson(responseBody, type);
+        CommonApiResponse<ClubListResDto> apiResponse = JsonUtil.fromJson(
+                responseBody, new TypeReference<CommonApiResponse<ClubListResDto>>() {}
+        );
         return apiResponse.getData();
     }
 
     @Override
-    public ClubDetail getClub(Long clubId) {
+    public ClubResDto getClub(Long clubId) {
         ClubRequest request = new ClubRequest().clubId(clubId);
-        ClubResponse response = getClubs(request);
+        ClubListResDto response = getClubs(request);
 
-        if (response.getClubs() != null && !response.getClubs().isEmpty()) {
-            return response.getClubs().get(0);
+        ClubResDto[] clubs = response.getClubs();
+        if (clubs != null && clubs.length > 0) {
+            return clubs[0];
         }
-
         return null;
     }
 

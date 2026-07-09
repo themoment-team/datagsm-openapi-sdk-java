@@ -1,19 +1,17 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
-import team.themoment.datagsm.sdk.openapi.model.*;
+import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.shared.domain.neis.dto.meal.response.MealResDto;
+import team.themoment.datagsm.shared.domain.neis.dto.schedule.response.ScheduleResDto;
+import team.themoment.datagsm.shared.domain.neis.dto.timetable.response.TimetableResDto;
 
-import java.lang.reflect.Type;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/**
- * NEIS 데이터 API 구현
- */
 public class NeisApiImpl implements NeisApi {
     private final HttpClient httpClient;
     private final String apiKey;
@@ -27,36 +25,39 @@ public class NeisApiImpl implements NeisApi {
     }
 
     @Override
-    public List<Meal> getMeals(MealRequest request) {
+    public MealResDto getMeals(MealRequest request) {
         Map<String, String> headers = createHeaders();
         Map<String, String> queryParams = buildMealQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/neis/meals", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<MealResponseWrapper>>(){}.getType();
-        CommonApiResponse<MealResponseWrapper> apiResponse = JsonUtil.fromJson(responseBody, type);
-        return apiResponse.getData().meals;
+        CommonApiResponse<MealResDto> apiResponse = JsonUtil.fromJson(
+                responseBody, new TypeReference<CommonApiResponse<MealResDto>>() {}
+        );
+        return apiResponse.getData();
     }
 
     @Override
-    public List<Schedule> getSchedules(ScheduleRequest request) {
+    public ScheduleResDto getSchedules(ScheduleRequest request) {
         Map<String, String> headers = createHeaders();
         Map<String, String> queryParams = buildScheduleQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/neis/schedules", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<ScheduleResponseWrapper>>(){}.getType();
-        CommonApiResponse<ScheduleResponseWrapper> apiResponse = JsonUtil.fromJson(responseBody, type);
-        return apiResponse.getData().schedules;
+        CommonApiResponse<ScheduleResDto> apiResponse = JsonUtil.fromJson(
+                responseBody, new TypeReference<CommonApiResponse<ScheduleResDto>>() {}
+        );
+        return apiResponse.getData();
     }
 
     @Override
-    public List<Timetable> getTimetables(TimetableRequest request) {
+    public TimetableResDto getTimetables(TimetableRequest request) {
         Map<String, String> headers = createHeaders();
         Map<String, String> queryParams = buildTimetableQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/neis/timetables", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<TimetableResponseWrapper>>(){}.getType();
-        CommonApiResponse<TimetableResponseWrapper> apiResponse = JsonUtil.fromJson(responseBody, type);
-        return apiResponse.getData().timetables;
+        CommonApiResponse<TimetableResDto> apiResponse = JsonUtil.fromJson(
+                responseBody, new TypeReference<CommonApiResponse<TimetableResDto>>() {}
+        );
+        return apiResponse.getData();
     }
 
     private Map<String, String> buildMealQueryParams(MealRequest request) {
@@ -114,17 +115,5 @@ public class NeisApiImpl implements NeisApi {
         Map<String, String> headers = new HashMap<>();
         headers.put("X-API-KEY", apiKey);
         return headers;
-    }
-
-    private static class MealResponseWrapper {
-        List<Meal> meals;
-    }
-
-    private static class ScheduleResponseWrapper {
-        List<Schedule> schedules;
-    }
-
-    private static class TimetableResponseWrapper {
-        List<Timetable> timetables;
     }
 }

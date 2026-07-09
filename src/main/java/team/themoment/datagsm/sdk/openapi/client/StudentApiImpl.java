@@ -1,11 +1,12 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
-import team.themoment.datagsm.sdk.openapi.model.*;
+import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResDto;
+import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,25 +22,26 @@ public class StudentApiImpl implements StudentApi {
     }
 
     @Override
-    public StudentResponse getStudents(StudentRequest request) {
+    public StudentListResDto getStudents(StudentRequest request) {
         Map<String, String> headers = createHeaders();
         Map<String, String> queryParams = buildStudentQueryParams(request);
 
         String responseBody = httpClient.get(baseUrl + "/v1/students", headers, queryParams);
-        Type type = new TypeToken<CommonApiResponse<StudentResponse>>(){}.getType();
-        CommonApiResponse<StudentResponse> apiResponse = JsonUtil.fromJson(responseBody, type);
+        CommonApiResponse<StudentListResDto> apiResponse = JsonUtil.fromJson(
+                responseBody, new TypeReference<CommonApiResponse<StudentListResDto>>() {}
+        );
         return apiResponse.getData();
     }
 
     @Override
-    public Student getStudent(Long studentId) {
+    public StudentResDto getStudent(Long studentId) {
         StudentRequest request = new StudentRequest().studentId(studentId);
-        StudentResponse response = getStudents(request);
+        StudentListResDto response = getStudents(request);
 
-        if (response.getStudents() != null && !response.getStudents().isEmpty()) {
-            return response.getStudents().get(0);
+        StudentResDto[] students = response.getStudents();
+        if (students != null && students.length > 0) {
+            return students[0];
         }
-
         return null;
     }
 

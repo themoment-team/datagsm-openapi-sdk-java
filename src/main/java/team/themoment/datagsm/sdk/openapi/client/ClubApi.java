@@ -1,30 +1,17 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
-import team.themoment.datagsm.sdk.openapi.model.*;
+import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.shared.domain.club.dto.response.ClubListResDto;
+import team.themoment.datagsm.shared.domain.club.dto.response.ClubResDto;
+import team.themoment.datagsm.shared.domain.club.entity.constant.ClubSortBy;
+import team.themoment.datagsm.shared.domain.club.entity.constant.ClubStatus;
+import team.themoment.datagsm.shared.domain.club.entity.constant.ClubType;
 
-/**
- * 동아리 데이터 API 인터페이스
- */
 public interface ClubApi {
-    /**
-     * 동아리 목록 조회
-     *
-     * @param request 조회 조건
-     * @return 동아리 응답
-     */
-    ClubResponse getClubs(ClubRequest request);
+    ClubListResDto getClubs(ClubRequest request);
 
-    /**
-     * 특정 동아리 조회
-     *
-     * @param clubId 동아리 ID
-     * @return 동아리 상세 정보
-     */
-    ClubDetail getClub(Long clubId);
+    ClubResDto getClub(Long clubId);
 
-    /**
-     * 동아리 요청 파라미터 빌더
-     */
     class ClubRequest {
         private Long clubId;
         private String clubName;
@@ -94,44 +81,15 @@ public interface ClubApi {
             return this;
         }
 
-        public Long getClubId() {
-            return clubId;
-        }
-
-        public String getClubName() {
-            return clubName;
-        }
-
-        public ClubType getClubType() {
-            return clubType;
-        }
-
-        public ClubStatus getStatus() {
-            return status;
-        }
-
-        public Integer getFoundedYear() {
-            return foundedYear;
-        }
-
-        public Integer getPage() {
-            return page;
-        }
-
-        public Integer getSize() {
-            return size;
-        }
-
-        public Boolean getIncludeLeaderInParticipants() {
-            return includeLeaderInParticipants;
-        }
-
-        public ClubSortBy getSortBy() {
-            return sortBy;
-        }
-
-        public SortDirection getSortDirection() {
-            return sortDirection;
-        }
+        public Long getClubId() { return clubId; }
+        public String getClubName() { return clubName; }
+        public ClubType getClubType() { return clubType; }
+        public ClubStatus getStatus() { return status; }
+        public Integer getFoundedYear() { return foundedYear; }
+        public Integer getPage() { return page; }
+        public Integer getSize() { return size; }
+        public Boolean getIncludeLeaderInParticipants() { return includeLeaderInParticipants; }
+        public ClubSortBy getSortBy() { return sortBy; }
+        public SortDirection getSortDirection() { return sortDirection; }
     }
 }
