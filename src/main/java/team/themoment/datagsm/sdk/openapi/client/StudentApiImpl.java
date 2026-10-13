@@ -8,6 +8,7 @@ import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResD
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StudentApiImpl implements StudentApi {
@@ -38,11 +39,8 @@ public class StudentApiImpl implements StudentApi {
         StudentRequest request = new StudentRequest().studentId(studentId);
         StudentListResDto response = getStudents(request);
 
-        StudentResDto[] students = response.getStudents();
-        if (students != null && students.length > 0) {
-            return students[0];
-        }
-        return null;
+        List<StudentResDto> students = response.getStudents();
+        return students.isEmpty() ? null : students.get(0);
     }
 
     private Map<String, String> buildStudentQueryParams(StudentRequest request) {

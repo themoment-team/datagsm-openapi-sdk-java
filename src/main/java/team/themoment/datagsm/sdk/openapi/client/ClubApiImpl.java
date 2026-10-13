@@ -8,6 +8,7 @@ import team.themoment.datagsm.shared.domain.club.dto.response.ClubListResDto;
 import team.themoment.datagsm.shared.domain.club.dto.response.ClubResDto;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ClubApiImpl implements ClubApi {
@@ -38,11 +39,8 @@ public class ClubApiImpl implements ClubApi {
         ClubRequest request = new ClubRequest().clubId(clubId);
         ClubListResDto response = getClubs(request);
 
-        ClubResDto[] clubs = response.getClubs();
-        if (clubs != null && clubs.length > 0) {
-            return clubs[0];
-        }
-        return null;
+        List<ClubResDto> clubs = response.getClubs();
+        return clubs.isEmpty() ? null : clubs.get(0);
     }
 
     private Map<String, String> buildClubQueryParams(ClubRequest request) {

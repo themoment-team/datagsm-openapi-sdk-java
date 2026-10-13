@@ -8,6 +8,7 @@ import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResD
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProjectApiImpl implements ProjectApi {
@@ -38,11 +39,8 @@ public class ProjectApiImpl implements ProjectApi {
         ProjectRequest request = new ProjectRequest().projectId(projectId);
         ProjectListResDto response = getProjects(request);
 
-        ProjectResDto[] projects = response.getProjects();
-        if (projects != null && projects.length > 0) {
-            return projects[0];
-        }
-        return null;
+        List<ProjectResDto> projects = response.getProjects();
+        return projects.isEmpty() ? null : projects.get(0);
     }
 
     private Map<String, String> buildProjectQueryParams(ProjectRequest request) {
