@@ -1,5 +1,8 @@
 package team.themoment.datagsm.sdk.openapi.http;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -40,7 +43,13 @@ public class JsonUtil {
         OBJECT_MAPPER = new ObjectMapper()
                 .registerModule(new KotlinModule.Builder().build())
                 .registerModule(kotlinDatetimeModule)
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                // 서버에 새 enum 값(예: 프로젝트 카테고리)이 추가돼도 역직렬화가 실패하지 않도록 null로 읽는다.
+                .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true)
+                // 요청 본문에서 null 필드는 보내지 않는다. 서버는 생략된 필드를 "기존 값 유지"로 해석한다.
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        // 컬렉션 안의 null(모르는 enum 값 포함)은 버려 List/Set에 null 원소가 섞이지 않게 한다.
+        OBJECT_MAPPER.setDefaultSetterInfo(JsonSetter.Value.forContentNulls(Nulls.SKIP));
     }
 
     public static <T> T fromJson(String json, TypeReference<T> typeRef) {
