@@ -16,7 +16,7 @@ public interface ClubApi {
         private Long clubId;
         private String clubName;
         private ClubType clubType;
-        private ClubStatus status;
+        private ClubStatus clubStatus;
         private Integer foundedYear;
         private Integer page;
         private Integer size;
@@ -46,9 +46,27 @@ public interface ClubApi {
             return this;
         }
 
-        public ClubRequest status(ClubStatus status) {
-            this.status = status;
+        /**
+         * 운영 상태 필터 (쿼리 키 {@code clubStatus})
+         *
+         * @param clubStatus 운영 상태
+         * @return 요청 객체
+         */
+        public ClubRequest clubStatus(ClubStatus clubStatus) {
+            this.clubStatus = clubStatus;
             return this;
+        }
+
+        /**
+         * 운영 상태 필터
+         *
+         * @param status 운영 상태
+         * @return 요청 객체
+         * @deprecated {@link #clubStatus(ClubStatus)}를 사용하세요.
+         */
+        @Deprecated
+        public ClubRequest status(ClubStatus status) {
+            return clubStatus(status);
         }
 
         public ClubRequest foundedYear(Integer foundedYear) {
@@ -84,7 +102,14 @@ public interface ClubApi {
         public Long getClubId() { return clubId; }
         public String getClubName() { return clubName; }
         public ClubType getClubType() { return clubType; }
-        public ClubStatus getStatus() { return status; }
+        public ClubStatus getClubStatus() { return clubStatus; }
+
+        /**
+         * @return 운영 상태
+         * @deprecated {@link #getClubStatus()}를 사용하세요.
+         */
+        @Deprecated
+        public ClubStatus getStatus() { return clubStatus; }
         public Integer getFoundedYear() { return foundedYear; }
         public Integer getPage() { return page; }
         public Integer getSize() { return size; }
