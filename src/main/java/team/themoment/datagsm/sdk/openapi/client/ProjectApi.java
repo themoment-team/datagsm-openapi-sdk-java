@@ -1,6 +1,8 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
 import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.sdk.openapi.model.request.EndProjectReqDto;
+import team.themoment.datagsm.sdk.openapi.model.request.ProjectReqDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
 import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectSortBy;
@@ -16,6 +18,47 @@ public interface ProjectApi {
      * @return 프로젝트 정보 (없으면 null)
      */
     ProjectResDto getProject(Long projectId);
+
+    /**
+     * 프로젝트 생성 ({@code POST /v1/projects}, PROJECT_WRITE 권한 필요)
+     *
+     * @param request 생성 요청
+     * @return 생성된 프로젝트
+     */
+    ProjectResDto createProject(ProjectReqDto request);
+
+    /**
+     * 프로젝트 수정 ({@code PUT /v1/projects/{projectId}}, PROJECT_WRITE 권한 필요)
+     *
+     * <p>운영 상태는 바뀌지 않습니다. {@link #endProject}와 {@link #reactivateProject}를 사용하세요.</p>
+     *
+     * @param projectId 프로젝트 ID
+     * @param request 수정 요청
+     * @return 수정된 프로젝트
+     */
+    ProjectResDto updateProject(Long projectId, ProjectReqDto request);
+
+    /**
+     * 프로젝트 삭제 ({@code DELETE /v1/projects/{projectId}}, PROJECT_WRITE 권한 필요)
+     *
+     * @param projectId 프로젝트 ID
+     */
+    void deleteProject(Long projectId);
+
+    /**
+     * 프로젝트 운영 종료 ({@code POST /v1/projects/{projectId}/end}, PROJECT_WRITE 권한 필요)
+     *
+     * @param projectId 프로젝트 ID
+     * @param request 종료 요청
+     */
+    void endProject(Long projectId, EndProjectReqDto request);
+
+    /**
+     * 종료된 프로젝트 운영 재개 ({@code POST /v1/projects/{projectId}/reactivate}, PROJECT_WRITE 권한 필요)
+     *
+     * @param projectId 프로젝트 ID
+     */
+    void reactivateProject(Long projectId);
 
     class ProjectRequest {
         private Long projectId;

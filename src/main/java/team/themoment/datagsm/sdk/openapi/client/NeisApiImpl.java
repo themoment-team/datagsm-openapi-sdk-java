@@ -2,7 +2,6 @@ package team.themoment.datagsm.sdk.openapi.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
-import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
 import team.themoment.datagsm.shared.domain.neis.dto.meal.response.MealResDto;
 import team.themoment.datagsm.shared.domain.neis.dto.schedule.response.ScheduleResDto;
@@ -14,54 +13,28 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NeisApiImpl implements NeisApi {
-    private final HttpClient httpClient;
-    private final String apiKey;
-    private final String baseUrl;
+public class NeisApiImpl extends AbstractApiClient implements NeisApi {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
     private static final long MAX_RANGE_DAYS = 365;
 
     public NeisApiImpl(HttpClient httpClient, String apiKey, String baseUrl) {
-        this.httpClient = httpClient;
-        this.apiKey = apiKey;
-        this.baseUrl = baseUrl;
+        super(httpClient, apiKey, baseUrl);
     }
 
     @Override
     public MealResDto getMeals(MealRequest request) {
-        Map<String, String> headers = createHeaders();
-        Map<String, String> queryParams = buildMealQueryParams(request);
-
-        String responseBody = httpClient.get(baseUrl + "/v1/neis/meals", headers, queryParams);
-        CommonApiResponse<MealResDto> apiResponse = JsonUtil.fromJson(
-                responseBody, new TypeReference<CommonApiResponse<MealResDto>>() {}
-        );
-        return apiResponse.getData();
+        return get("/v1/neis/meals", buildMealQueryParams(request), new TypeReference<CommonApiResponse<MealResDto>>() {});
     }
 
     @Override
     public ScheduleResDto getSchedules(ScheduleRequest request) {
-        Map<String, String> headers = createHeaders();
-        Map<String, String> queryParams = buildScheduleQueryParams(request);
-
-        String responseBody = httpClient.get(baseUrl + "/v1/neis/schedules", headers, queryParams);
-        CommonApiResponse<ScheduleResDto> apiResponse = JsonUtil.fromJson(
-                responseBody, new TypeReference<CommonApiResponse<ScheduleResDto>>() {}
-        );
-        return apiResponse.getData();
+        return get("/v1/neis/schedules", buildScheduleQueryParams(request), new TypeReference<CommonApiResponse<ScheduleResDto>>() {});
     }
 
     @Override
     public TimetableResDto getTimetables(TimetableRequest request) {
         validateTimetableRequest(request);
-        Map<String, String> headers = createHeaders();
-        Map<String, String> queryParams = buildTimetableQueryParams(request);
-
-        String responseBody = httpClient.get(baseUrl + "/v1/neis/timetables", headers, queryParams);
-        CommonApiResponse<TimetableResDto> apiResponse = JsonUtil.fromJson(
-                responseBody, new TypeReference<CommonApiResponse<TimetableResDto>>() {}
-        );
-        return apiResponse.getData();
+        return get("/v1/neis/timetables", buildTimetableQueryParams(request), new TypeReference<CommonApiResponse<TimetableResDto>>() {});
     }
 
     private static void validateTimetableRequest(TimetableRequest request) {
@@ -137,11 +110,5 @@ public class NeisApiImpl implements NeisApi {
         }
 
         return params;
-    }
-
-    private Map<String, String> createHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("X-API-KEY", apiKey);
-        return headers;
     }
 }

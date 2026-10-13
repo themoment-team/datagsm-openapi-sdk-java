@@ -2,8 +2,8 @@ package team.themoment.datagsm.sdk.openapi.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
-import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.sdk.openapi.model.request.ClubReqDto;
 import team.themoment.datagsm.shared.domain.club.dto.response.ClubListResDto;
 import team.themoment.datagsm.shared.domain.club.dto.response.ClubResDto;
 
@@ -11,27 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ClubApiImpl implements ClubApi {
-    private final HttpClient httpClient;
-    private final String apiKey;
-    private final String baseUrl;
+public class ClubApiImpl extends AbstractApiClient implements ClubApi {
+    private static final String CLUBS_PATH = "/v1/clubs";
 
     public ClubApiImpl(HttpClient httpClient, String apiKey, String baseUrl) {
-        this.httpClient = httpClient;
-        this.apiKey = apiKey;
-        this.baseUrl = baseUrl;
+        super(httpClient, apiKey, baseUrl);
     }
 
     @Override
     public ClubListResDto getClubs(ClubRequest request) {
-        Map<String, String> headers = createHeaders();
-        Map<String, String> queryParams = buildClubQueryParams(request);
-
-        String responseBody = httpClient.get(baseUrl + "/v1/clubs", headers, queryParams);
-        CommonApiResponse<ClubListResDto> apiResponse = JsonUtil.fromJson(
-                responseBody, new TypeReference<CommonApiResponse<ClubListResDto>>() {}
-        );
-        return apiResponse.getData();
+        return get(CLUBS_PATH, buildClubQueryParams(request), new TypeReference<CommonApiResponse<ClubListResDto>>() {});
     }
 
     @Override
@@ -41,6 +30,21 @@ public class ClubApiImpl implements ClubApi {
 
         List<ClubResDto> clubs = response.getClubs();
         return clubs.isEmpty() ? null : clubs.get(0);
+    }
+
+    @Override
+    public ClubResDto createClub(ClubReqDto request) {
+        return post(CLUBS_PATH, requireBody(request, "request"), new TypeReference<CommonApiResponse<ClubResDto>>() {});
+    }
+
+    @Override
+    public ClubResDto updateClub(Long clubId, ClubReqDto request) {
+        return put(idPath(CLUBS_PATH, clubId), requireBody(request, "request"), new TypeReference<CommonApiResponse<ClubResDto>>() {});
+    }
+
+    @Override
+    public void deleteClub(Long clubId) {
+        delete(idPath(CLUBS_PATH, clubId));
     }
 
     private Map<String, String> buildClubQueryParams(ClubRequest request) {
@@ -78,11 +82,5 @@ public class ClubApiImpl implements ClubApi {
         }
 
         return params;
-    }
-
-    private Map<String, String> createHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("X-API-KEY", apiKey);
-        return headers;
     }
 }

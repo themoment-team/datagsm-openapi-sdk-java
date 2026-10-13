@@ -2,9 +2,10 @@ package team.themoment.datagsm.sdk.openapi.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
-import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
 import team.themoment.datagsm.sdk.openapi.model.EnrollmentFilter;
+import team.themoment.datagsm.sdk.openapi.model.request.CreateStudentReqDto;
+import team.themoment.datagsm.sdk.openapi.model.request.UpdateStudentReqDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
 
@@ -12,27 +13,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StudentApiImpl implements StudentApi {
-    private final HttpClient httpClient;
-    private final String apiKey;
-    private final String baseUrl;
+public class StudentApiImpl extends AbstractApiClient implements StudentApi {
+    private static final String STUDENTS_PATH = "/v1/students";
 
     public StudentApiImpl(HttpClient httpClient, String apiKey, String baseUrl) {
-        this.httpClient = httpClient;
-        this.apiKey = apiKey;
-        this.baseUrl = baseUrl;
+        super(httpClient, apiKey, baseUrl);
     }
 
     @Override
     public StudentListResDto getStudents(StudentRequest request) {
-        Map<String, String> headers = createHeaders();
-        Map<String, String> queryParams = buildStudentQueryParams(request);
-
-        String responseBody = httpClient.get(baseUrl + "/v1/students", headers, queryParams);
-        CommonApiResponse<StudentListResDto> apiResponse = JsonUtil.fromJson(
-                responseBody, new TypeReference<CommonApiResponse<StudentListResDto>>() {}
-        );
-        return apiResponse.getData();
+        return get(STUDENTS_PATH, buildStudentQueryParams(request), new TypeReference<CommonApiResponse<StudentListResDto>>() {});
     }
 
     @Override
@@ -44,6 +34,16 @@ public class StudentApiImpl implements StudentApi {
 
         List<StudentResDto> students = response.getStudents();
         return students.isEmpty() ? null : students.get(0);
+    }
+
+    @Override
+    public StudentResDto createStudent(CreateStudentReqDto request) {
+        return post(STUDENTS_PATH, requireBody(request, "request"), new TypeReference<CommonApiResponse<StudentResDto>>() {});
+    }
+
+    @Override
+    public StudentResDto updateStudent(Long studentId, UpdateStudentReqDto request) {
+        return put(idPath(STUDENTS_PATH, studentId), requireBody(request, "request"), new TypeReference<CommonApiResponse<StudentResDto>>() {});
     }
 
     private Map<String, String> buildStudentQueryParams(StudentRequest request) {
@@ -102,11 +102,5 @@ public class StudentApiImpl implements StudentApi {
         }
 
         return params;
-    }
-
-    private Map<String, String> createHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("X-API-KEY", apiKey);
-        return headers;
     }
 }

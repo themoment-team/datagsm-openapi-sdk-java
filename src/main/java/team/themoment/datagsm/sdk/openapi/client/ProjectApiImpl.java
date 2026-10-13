@@ -2,8 +2,9 @@ package team.themoment.datagsm.sdk.openapi.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
-import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.sdk.openapi.model.request.EndProjectReqDto;
+import team.themoment.datagsm.sdk.openapi.model.request.ProjectReqDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
 import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectStatus;
@@ -12,27 +13,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProjectApiImpl implements ProjectApi {
-    private final HttpClient httpClient;
-    private final String apiKey;
-    private final String baseUrl;
+public class ProjectApiImpl extends AbstractApiClient implements ProjectApi {
+    private static final String PROJECTS_PATH = "/v1/projects";
 
     public ProjectApiImpl(HttpClient httpClient, String apiKey, String baseUrl) {
-        this.httpClient = httpClient;
-        this.apiKey = apiKey;
-        this.baseUrl = baseUrl;
+        super(httpClient, apiKey, baseUrl);
     }
 
     @Override
     public ProjectListResDto getProjects(ProjectRequest request) {
-        Map<String, String> headers = createHeaders();
-        Map<String, String> queryParams = buildProjectQueryParams(request);
-
-        String responseBody = httpClient.get(baseUrl + "/v1/projects", headers, queryParams);
-        CommonApiResponse<ProjectListResDto> apiResponse = JsonUtil.fromJson(
-                responseBody, new TypeReference<CommonApiResponse<ProjectListResDto>>() {}
-        );
-        return apiResponse.getData();
+        return get(PROJECTS_PATH, buildProjectQueryParams(request), new TypeReference<CommonApiResponse<ProjectListResDto>>() {});
     }
 
     @Override
@@ -46,6 +36,31 @@ public class ProjectApiImpl implements ProjectApi {
             }
         }
         return null;
+    }
+
+    @Override
+    public ProjectResDto createProject(ProjectReqDto request) {
+        return post(PROJECTS_PATH, requireBody(request, "request"), new TypeReference<CommonApiResponse<ProjectResDto>>() {});
+    }
+
+    @Override
+    public ProjectResDto updateProject(Long projectId, ProjectReqDto request) {
+        return put(idPath(PROJECTS_PATH, projectId), requireBody(request, "request"), new TypeReference<CommonApiResponse<ProjectResDto>>() {});
+    }
+
+    @Override
+    public void deleteProject(Long projectId) {
+        delete(idPath(PROJECTS_PATH, projectId));
+    }
+
+    @Override
+    public void endProject(Long projectId, EndProjectReqDto request) {
+        postWithoutResult(idPath(PROJECTS_PATH, projectId) + "/end", requireBody(request, "request"));
+    }
+
+    @Override
+    public void reactivateProject(Long projectId) {
+        postWithoutResult(idPath(PROJECTS_PATH, projectId) + "/reactivate", null);
     }
 
     private Map<String, String> buildProjectQueryParams(ProjectRequest request) {
@@ -80,11 +95,5 @@ public class ProjectApiImpl implements ProjectApi {
         }
 
         return params;
-    }
-
-    private Map<String, String> createHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("X-API-KEY", apiKey);
-        return headers;
     }
 }

@@ -1,6 +1,7 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
 import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.sdk.openapi.model.request.ClubReqDto;
 import team.themoment.datagsm.shared.domain.club.dto.response.ClubListResDto;
 import team.themoment.datagsm.shared.domain.club.dto.response.ClubResDto;
 import team.themoment.datagsm.shared.domain.club.entity.constant.ClubSortBy;
@@ -11,6 +12,30 @@ public interface ClubApi {
     ClubListResDto getClubs(ClubRequest request);
 
     ClubResDto getClub(Long clubId);
+
+    /**
+     * 동아리 생성 ({@code POST /v1/clubs}, CLUB_WRITE 권한 필요)
+     *
+     * @param request 생성 요청
+     * @return 생성된 동아리
+     */
+    ClubResDto createClub(ClubReqDto request);
+
+    /**
+     * 동아리 수정 ({@code PUT /v1/clubs/{clubId}}, CLUB_WRITE 권한 필요)
+     *
+     * @param clubId 동아리 ID
+     * @param request 수정 요청 (전체 교체)
+     * @return 수정된 동아리
+     */
+    ClubResDto updateClub(Long clubId, ClubReqDto request);
+
+    /**
+     * 동아리 삭제 ({@code DELETE /v1/clubs/{clubId}}, CLUB_WRITE 권한 필요)
+     *
+     * @param clubId 동아리 ID
+     */
+    void deleteClub(Long clubId);
 
     class ClubRequest {
         private Long clubId;

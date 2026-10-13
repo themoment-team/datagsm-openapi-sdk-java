@@ -2,6 +2,8 @@ package team.themoment.datagsm.sdk.openapi.client;
 
 import team.themoment.datagsm.sdk.openapi.model.EnrollmentFilter;
 import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.sdk.openapi.model.request.CreateStudentReqDto;
+import team.themoment.datagsm.sdk.openapi.model.request.UpdateStudentReqDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
 import team.themoment.datagsm.shared.domain.student.entity.constant.Major;
@@ -19,6 +21,23 @@ public interface StudentApi {
      * @return 학생 정보 (없으면 null)
      */
     StudentResDto getStudent(Long studentId);
+
+    /**
+     * 학생 생성 ({@code POST /v1/students}, STUDENT_WRITE 권한 필요)
+     *
+     * @param request 생성 요청
+     * @return 생성된 학생
+     */
+    StudentResDto createStudent(CreateStudentReqDto request);
+
+    /**
+     * 학생 수정 ({@code PUT /v1/students/{studentId}}, STUDENT_WRITE 권한 필요)
+     *
+     * @param studentId 학생 ID
+     * @param request 수정 요청 (전체 교체)
+     * @return 수정된 학생
+     */
+    StudentResDto updateStudent(Long studentId, UpdateStudentReqDto request);
 
     class StudentRequest {
         private Long studentId;
