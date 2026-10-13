@@ -6,6 +6,7 @@ import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
+import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectStatus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +37,15 @@ public class ProjectApiImpl implements ProjectApi {
 
     @Override
     public ProjectResDto getProject(Long projectId) {
-        ProjectRequest request = new ProjectRequest().projectId(projectId);
-        ProjectListResDto response = getProjects(request);
-
-        List<ProjectResDto> projects = response.getProjects();
-        return projects.isEmpty() ? null : projects.get(0);
+        // 서버에 "전체 상태" 조회 옵션이 없어 ACTIVE, ENDED 순으로 조회한다.
+        for (ProjectStatus status : ProjectStatus.values()) {
+            ProjectRequest request = new ProjectRequest().projectId(projectId).status(status);
+            List<ProjectResDto> projects = getProjects(request).getProjects();
+            if (!projects.isEmpty()) {
+                return projects.get(0);
+            }
+        }
+        return null;
     }
 
     private Map<String, String> buildProjectQueryParams(ProjectRequest request) {
@@ -54,6 +59,12 @@ public class ProjectApiImpl implements ProjectApi {
         }
         if (request.getClubId() != null) {
             params.put("clubId", request.getClubId().toString());
+        }
+        if (request.getStatus() != null) {
+            params.put("status", request.getStatus().name());
+        }
+        if (request.getCategory() != null) {
+            params.put("category", request.getCategory());
         }
         if (request.getPage() != null) {
             params.put("page", request.getPage().toString());

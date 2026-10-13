@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import team.themoment.datagsm.sdk.openapi.http.HttpClient;
 import team.themoment.datagsm.sdk.openapi.http.JsonUtil;
 import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.sdk.openapi.model.EnrollmentFilter;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
 
@@ -36,7 +37,9 @@ public class StudentApiImpl implements StudentApi {
 
     @Override
     public StudentResDto getStudent(Long studentId) {
-        StudentRequest request = new StudentRequest().studentId(studentId);
+        StudentRequest request = new StudentRequest()
+                .studentId(studentId)
+                .enrollmentFilter(EnrollmentFilter.detailed().includeGraduates(true).includeWithdrawn(true));
         StudentListResDto response = getStudents(request);
 
         List<StudentResDto> students = response.getStudents();
@@ -75,6 +78,12 @@ public class StudentApiImpl implements StudentApi {
         }
         if (request.getSpecialty() != null) {
             params.put("specialty", request.getSpecialty());
+        }
+        if (request.getMajor() != null) {
+            params.put("major", request.getMajor().name());
+        }
+        if (request.getGithubId() != null) {
+            params.put("githubId", request.getGithubId());
         }
         if (request.getEnrollmentFilter() != null) {
             request.getEnrollmentFilter().applyToParams(params);
