@@ -3,6 +3,7 @@ package team.themoment.datagsm.sdk.openapi.http;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import team.themoment.datagsm.sdk.openapi.model.CommonApiResponse;
+import team.themoment.datagsm.shared.domain.neis.dto.meal.response.MealInfoResDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
 import team.themoment.datagsm.shared.domain.student.entity.constant.Sex;
@@ -39,6 +40,19 @@ class JsonUtilTest {
         StudentResDto student = JsonUtil.fromJson(studentJson("FUTURE_MAJOR"), StudentResDto.class);
 
         assertNull(student.getMajor());
+    }
+
+    @Test
+    void nullableCollection_staysNull() {
+        String json = "{\"mealId\":\"1\",\"schoolCode\":\"s\",\"schoolName\":\"n\",\"officeCode\":\"o\","
+                + "\"officeName\":\"on\",\"mealDate\":\"2026-03-02\",\"mealType\":\"LUNCH\",\"mealMenu\":[\"밥\"],"
+                + "\"mealAllergyInfo\":null,\"mealCalories\":null,\"originInfo\":null,\"nutritionInfo\":null,"
+                + "\"mealServeCount\":null}";
+
+        MealInfoResDto meal = JsonUtil.fromJson(json, MealInfoResDto.class);
+
+        assertNull(meal.getMealAllergyInfo());
+        assertEquals("2026-03-02", meal.getMealDate().toString());
     }
 
     public static class EnumListHolder {
