@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     // Shared types from datagsm-server (api: 반환 타입이 공개 API에 노출되므로 소비자 컴파일 클래스패스에 포함)
-    api("team.themoment:datagsm-shared:20260914-49")
+    api("team.themoment:datagsm-shared:20261017-50")
     // shared 응답 타입이 kotlinx.datetime.LocalDate를 노출하지만 shared POM에서는 runtime 범위이므로 api로 직접 선언
     api("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
