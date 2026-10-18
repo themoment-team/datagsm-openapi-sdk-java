@@ -37,12 +37,13 @@ final class Fixtures {
                 + ",\"clubs\":[" + String.join(",", clubs) + "]}");
     }
 
-    /**
-     * 운영 서버(master)와 develop 서버 응답을 모두 만족하도록 develop 전용 필드도 포함한다.
-     */
     static String project(long id, String status) {
+        return project(id, status, "[]");
+    }
+
+    static String project(long id, String status, String categoriesJson) {
         return "{\"id\":" + id + ",\"name\":\"DataGSM\",\"description\":\"설명\",\"startYear\":2024,"
-                + "\"endYear\":null,\"status\":\"" + status + "\",\"categories\":[],\"iconUrl\":null,"
+                + "\"endYear\":null,\"status\":\"" + status + "\",\"categories\":" + categoriesJson + ",\"iconUrl\":null,"
                 + "\"iconKey\":null,\"deploymentUrl\":null,\"club\":null,\"participants\":[],"
                 + "\"repositories\":[],\"techStacks\":[]}";
     }

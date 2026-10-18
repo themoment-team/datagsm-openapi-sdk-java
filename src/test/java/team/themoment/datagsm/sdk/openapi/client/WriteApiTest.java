@@ -13,6 +13,7 @@ import team.themoment.datagsm.shared.domain.club.dto.response.ClubResDto;
 import team.themoment.datagsm.shared.domain.club.entity.constant.ClubStatus;
 import team.themoment.datagsm.shared.domain.club.entity.constant.ClubType;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
+import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectCategory;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
 import team.themoment.datagsm.shared.domain.student.entity.constant.Sex;
 import team.themoment.datagsm.shared.domain.student.entity.constant.StudentRole;
@@ -139,6 +140,25 @@ class WriteApiTest {
         assertEquals(BASE_URL + "/v1/projects", http.lastCall().url);
         assertEquals("[\"TEAM\",\"CLUB\"]", body.get("categories").toString());
         assertEquals("", body.get("deploymentUrl").asText());
+    }
+
+    @Test
+    void createProject_sendsCategoryEnumsByName() throws Exception {
+        http.respond(wrap(project(4, "ACTIVE")));
+
+        projects.createProject(new ProjectReqDto("DataGSM", "설명", 2024)
+                .categories(ProjectCategory.TEAM, ProjectCategory.CLUB, ProjectCategory.TEAM));
+
+        assertEquals("[\"TEAM\",\"CLUB\"]", json(http.lastCall().body).get("categories").toString());
+    }
+
+    @Test
+    void categoriesWithoutArguments_clearsAllCategories() throws Exception {
+        http.respond(wrap(project(3, "ACTIVE")));
+
+        projects.updateProject(3L, new ProjectReqDto("DataGSM", "설명", 2024).categories());
+
+        assertEquals("[]", json(http.lastCall().body).get("categories").toString());
     }
 
     @Test
