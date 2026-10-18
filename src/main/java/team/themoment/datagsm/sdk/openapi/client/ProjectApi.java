@@ -5,6 +5,7 @@ import team.themoment.datagsm.sdk.openapi.model.request.EndProjectReqDto;
 import team.themoment.datagsm.sdk.openapi.model.request.ProjectReqDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
+import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectCategory;
 import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectSortBy;
 import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectStatus;
 
@@ -106,10 +107,18 @@ public interface ProjectApi {
         /**
          * 카테고리 필터. 해당 카테고리를 포함하는 프로젝트만 조회합니다.
          *
-         * <p>카테고리 값(예: {@code TEAM}, {@code CLUB})은 서버에서 계속 추가·변경되므로 문자열로 받습니다.
-         * 카테고리를 지원하지 않는 서버 버전에서는 무시됩니다.</p>
+         * @param category 카테고리
+         * @return 요청 객체
+         */
+        public ProjectRequest category(ProjectCategory category) {
+            this.category = category == null ? null : category.name();
+            return this;
+        }
+
+        /**
+         * 카테고리 필터를 이름으로 지정합니다. SDK가 아직 모르는 새 카테고리 값으로 조회할 때 사용합니다.
          *
-         * @param category 카테고리 이름
+         * @param category 카테고리 이름 (예: {@code TEAM})
          * @return 요청 객체
          */
         public ProjectRequest category(String category) {

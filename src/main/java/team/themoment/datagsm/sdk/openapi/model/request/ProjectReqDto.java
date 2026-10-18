@@ -1,7 +1,9 @@
 package team.themoment.datagsm.sdk.openapi.model.request;
 
+import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectCategory;
 import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectStatus;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -12,8 +14,7 @@ import java.util.Objects;
  *
  * <p>운영 상태 변경은 수정 API에 반영되지 않으므로 {@code endProject}/{@code reactivateProject}를 사용하세요.</p>
  *
- * <p>{@code categories}와 {@code deploymentUrl}은 아직 운영 서버에 배포되지 않은 필드로,
- * 지원하지 않는 서버에서는 무시됩니다. 수정 시 의미는 다음과 같습니다.</p>
+ * <p>수정 시 {@code categories}와 {@code deploymentUrl}의 의미는 다음과 같습니다.</p>
  * <ul>
  *     <li>categories: 지정하지 않으면(null) 기존 값 유지, 빈 목록이면 모두 해제</li>
  *     <li>deploymentUrl: 지정하지 않으면(null) 기존 값 유지, 빈 문자열이면 삭제</li>
@@ -92,7 +93,7 @@ public class ProjectReqDto {
     /**
      * 카테고리를 지정합니다. 빈 컬렉션을 넘기면 모든 카테고리를 해제합니다.
      *
-     * <p>카테고리 값(예: {@code TEAM}, {@code CLUB})은 서버에서 계속 추가·변경되므로 문자열로 받습니다.</p>
+     * <p>SDK가 아직 모르는 새 카테고리 값을 보낼 때 사용합니다. 보통은 {@link #categories(ProjectCategory...)}를 사용하세요.</p>
      *
      * @param categories 카테고리 이름 목록 (중복은 제거)
      * @return 요청 객체
@@ -101,6 +102,19 @@ public class ProjectReqDto {
         Objects.requireNonNull(categories, "categories (use keepCategories() to leave them unchanged)");
         this.categories = List.copyOf(new LinkedHashSet<>(categories));
         return this;
+    }
+
+    /**
+     * 카테고리를 지정합니다. 인자 없이 호출하면 모든 카테고리를 해제합니다.
+     *
+     * @param categories 카테고리 목록 (중복은 제거)
+     * @return 요청 객체
+     */
+    public ProjectReqDto categories(ProjectCategory... categories) {
+        Objects.requireNonNull(categories, "categories (use keepCategories() to leave them unchanged)");
+        return categories(Arrays.stream(categories)
+                .map(category -> Objects.requireNonNull(category, "category").name())
+                .toList());
     }
 
     /**
