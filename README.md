@@ -107,6 +107,10 @@ try (DataGsmOpenApiClient client = DataGsmOpenApiClient.builder("YOUR_API_KEY").
     ProjectListResDto ended = client.projects().getProjects(
             new ProjectApi.ProjectRequest().status(ProjectStatus.ENDED));
 
+    // 카테고리 필터 (해당 카테고리를 포함하는 프로젝트, 응답의 getCategories()는 List<ProjectCategory>)
+    ProjectListResDto teamProjects = client.projects().getProjects(
+            new ProjectApi.ProjectRequest().category(ProjectCategory.TEAM));
+
     // 시간표 조회 (date 또는 fromDate/toDate 필수)
     TimetableResDto timetable = client.neis().getTimetables(
             new NeisApi.TimetableRequest(1, 1).date(LocalDate.now()));
@@ -122,6 +126,7 @@ ProjectResDto created = projects.createProject(
         new ProjectReqDto("DataGSM", "학교 데이터를 제공하는 API 서비스", 2024)
                 .clubId(1L)
                 .participantIds(List.of(1L, 2L))
+                .categories(ProjectCategory.TEAM, ProjectCategory.CLUB)
                 .techStacks(List.of("Kotlin", "Spring Boot")));
 
 // 수정: categories를 지정하지 않으면 기존 값 유지, clearCategories()는 모두 해제
