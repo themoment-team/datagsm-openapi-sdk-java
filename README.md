@@ -1,5 +1,4 @@
 ## DataGSM OpenAPI SDK for Java
-[![JitPack](https://jitpack.io/v/themoment-team/datagsm-openapi-sdk-java.svg)](https://jitpack.io/#themoment-team/datagsm-openapi-sdk-java)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Java](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.java.com/)
 
