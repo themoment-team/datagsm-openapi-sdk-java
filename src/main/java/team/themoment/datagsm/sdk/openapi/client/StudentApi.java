@@ -2,8 +2,11 @@ package team.themoment.datagsm.sdk.openapi.client;
 
 import team.themoment.datagsm.sdk.openapi.model.EnrollmentFilter;
 import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.sdk.openapi.model.request.CreateStudentReqDto;
+import team.themoment.datagsm.sdk.openapi.model.request.UpdateStudentReqDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentListResDto;
 import team.themoment.datagsm.shared.domain.student.dto.response.StudentResDto;
+import team.themoment.datagsm.shared.domain.student.entity.constant.Major;
 import team.themoment.datagsm.shared.domain.student.entity.constant.Sex;
 import team.themoment.datagsm.shared.domain.student.entity.constant.StudentRole;
 import team.themoment.datagsm.shared.domain.student.entity.constant.StudentSortBy;
@@ -11,7 +14,30 @@ import team.themoment.datagsm.shared.domain.student.entity.constant.StudentSortB
 public interface StudentApi {
     StudentListResDto getStudents(StudentRequest request);
 
+    /**
+     * 학생 단건 조회. 졸업생과 자퇴생도 함께 조회합니다.
+     *
+     * @param studentId 학생 ID
+     * @return 학생 정보 (없으면 null)
+     */
     StudentResDto getStudent(Long studentId);
+
+    /**
+     * 학생 생성 ({@code POST /v1/students}, STUDENT_WRITE 권한 필요)
+     *
+     * @param request 생성 요청
+     * @return 생성된 학생
+     */
+    StudentResDto createStudent(CreateStudentReqDto request);
+
+    /**
+     * 학생 수정 ({@code PUT /v1/students/{studentId}}, STUDENT_WRITE 권한 필요)
+     *
+     * @param studentId 학생 ID
+     * @param request 수정 요청 (전체 교체)
+     * @return 수정된 학생
+     */
+    StudentResDto updateStudent(Long studentId, UpdateStudentReqDto request);
 
     class StudentRequest {
         private Long studentId;
@@ -24,6 +50,8 @@ public interface StudentApi {
         private StudentRole role;
         private Integer dormitoryRoom;
         private String specialty;
+        private Major major;
+        private String githubId;
         private EnrollmentFilter enrollmentFilter;
         private Integer page;
         private Integer size;
@@ -86,6 +114,22 @@ public interface StudentApi {
             return this;
         }
 
+        public StudentRequest major(Major major) {
+            this.major = major;
+            return this;
+        }
+
+        /**
+         * GitHub ID 필터 (부분 일치)
+         *
+         * @param githubId GitHub ID
+         * @return 요청 객체
+         */
+        public StudentRequest githubId(String githubId) {
+            this.githubId = githubId;
+            return this;
+        }
+
         public StudentRequest enrollmentFilter(EnrollmentFilter enrollmentFilter) {
             this.enrollmentFilter = enrollmentFilter;
             return this;
@@ -121,6 +165,8 @@ public interface StudentApi {
         public StudentRole getRole() { return role; }
         public Integer getDormitoryRoom() { return dormitoryRoom; }
         public String getSpecialty() { return specialty; }
+        public Major getMajor() { return major; }
+        public String getGithubId() { return githubId; }
         public EnrollmentFilter getEnrollmentFilter() { return enrollmentFilter; }
         public Integer getPage() { return page; }
         public Integer getSize() { return size; }

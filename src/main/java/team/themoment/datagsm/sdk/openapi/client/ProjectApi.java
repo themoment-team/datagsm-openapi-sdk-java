@@ -1,19 +1,72 @@
 package team.themoment.datagsm.sdk.openapi.client;
 
 import team.themoment.datagsm.sdk.openapi.model.SortDirection;
+import team.themoment.datagsm.sdk.openapi.model.request.EndProjectReqDto;
+import team.themoment.datagsm.sdk.openapi.model.request.ProjectReqDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectListResDto;
 import team.themoment.datagsm.shared.domain.project.dto.response.ProjectResDto;
+import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectCategory;
 import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectSortBy;
+import team.themoment.datagsm.shared.domain.project.entity.constant.ProjectStatus;
 
 public interface ProjectApi {
     ProjectListResDto getProjects(ProjectRequest request);
 
+    /**
+     * 프로젝트 단건 조회. 운영 중(ACTIVE)과 종료(ENDED) 프로젝트를 모두 찾습니다.
+     *
+     * @param projectId 프로젝트 ID
+     * @return 프로젝트 정보 (없으면 null)
+     */
     ProjectResDto getProject(Long projectId);
+
+    /**
+     * 프로젝트 생성 ({@code POST /v1/projects}, PROJECT_WRITE 권한 필요)
+     *
+     * @param request 생성 요청
+     * @return 생성된 프로젝트
+     */
+    ProjectResDto createProject(ProjectReqDto request);
+
+    /**
+     * 프로젝트 수정 ({@code PUT /v1/projects/{projectId}}, PROJECT_WRITE 권한 필요)
+     *
+     * <p>운영 상태는 바뀌지 않습니다. {@link #endProject}와 {@link #reactivateProject}를 사용하세요.</p>
+     *
+     * @param projectId 프로젝트 ID
+     * @param request 수정 요청
+     * @return 수정된 프로젝트
+     */
+    ProjectResDto updateProject(Long projectId, ProjectReqDto request);
+
+    /**
+     * 프로젝트 삭제 ({@code DELETE /v1/projects/{projectId}}, PROJECT_WRITE 권한 필요)
+     *
+     * @param projectId 프로젝트 ID
+     */
+    void deleteProject(Long projectId);
+
+    /**
+     * 프로젝트 운영 종료 ({@code POST /v1/projects/{projectId}/end}, PROJECT_WRITE 권한 필요)
+     *
+     * @param projectId 프로젝트 ID
+     * @param request 종료 요청
+     */
+    void endProject(Long projectId, EndProjectReqDto request);
+
+    /**
+     * 종료된 프로젝트 운영 재개 ({@code POST /v1/projects/{projectId}/reactivate}, PROJECT_WRITE 권한 필요)
+     *
+     * @param projectId 프로젝트 ID
+     */
+    void reactivateProject(Long projectId);
 
     class ProjectRequest {
         private Long projectId;
         private String projectName;
         private Long clubId;
+        private ProjectStatus status;
+        private String category;
         private Integer page;
         private Integer size;
         private ProjectSortBy sortBy;
@@ -40,6 +93,39 @@ public interface ProjectApi {
             return this;
         }
 
+        /**
+         * 운영 상태 필터. 지정하지 않으면 서버 기본값에 따라 ACTIVE 프로젝트만 조회합니다.
+         *
+         * @param status 운영 상태
+         * @return 요청 객체
+         */
+        public ProjectRequest status(ProjectStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        /**
+         * 카테고리 필터. 해당 카테고리를 포함하는 프로젝트만 조회합니다.
+         *
+         * @param category 카테고리
+         * @return 요청 객체
+         */
+        public ProjectRequest category(ProjectCategory category) {
+            this.category = category == null ? null : category.name();
+            return this;
+        }
+
+        /**
+         * 카테고리 필터를 이름으로 지정합니다. SDK가 아직 모르는 새 카테고리 값으로 조회할 때 사용합니다.
+         *
+         * @param category 카테고리 이름 (예: {@code TEAM})
+         * @return 요청 객체
+         */
+        public ProjectRequest category(String category) {
+            this.category = category;
+            return this;
+        }
+
         public ProjectRequest page(Integer page) {
             this.page = page;
             return this;
@@ -63,6 +149,8 @@ public interface ProjectApi {
         public Long getProjectId() { return projectId; }
         public String getProjectName() { return projectName; }
         public Long getClubId() { return clubId; }
+        public ProjectStatus getStatus() { return status; }
+        public String getCategory() { return category; }
         public Integer getPage() { return page; }
         public Integer getSize() { return size; }
         public ProjectSortBy getSortBy() { return sortBy; }
