@@ -4,86 +4,42 @@
 
 DataGSM의 OpenAPI를 추상화된 환경에서 제공합니다.
 
-- 좌표: `team.themoment.datagsm.sdk:openapi:3.0.0`
+- 좌표: `io.github.themoment-team:datagsm-openapi-sdk-java:3.0.1`
 - 요구 사항: Java 17 이상
-- 응답 모델은 서버가 배포하는 `team.themoment:datagsm-shared` 타입을 그대로 사용하며, SDK 의존성으로 함께 내려받습니다.
+- 응답 모델은 서버가 배포하는 `io.github.themoment-team:datagsm-shared` 타입을 그대로 사용하며, SDK 의존성으로 함께 내려받습니다.
 
 ### 설치
 
-SDK와 `datagsm-shared`는 GitHub Packages에 배포됩니다. GitHub Packages는 공개 패키지도 인증이 필요하므로
-`read:packages` 권한이 있는 GitHub Personal Access Token(classic)을 준비하세요.
-SDK(`datagsm-openapi-sdk-java`)와 shared(`datagsm-server`) 두 저장소를 모두 등록해야 합니다.
+SDK와 `datagsm-shared`는 Maven Central에 배포됩니다. 별도 저장소나 인증 토큰 없이 `mavenCentral()`만 있으면 됩니다.
 
 #### Gradle (Kotlin DSL)
 ```kotlin
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/themoment-team/datagsm-openapi-sdk-java")
-        credentials {
-            username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
-            password = providers.gradleProperty("gpr.token").orNull ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
-    maven {
-        url = uri("https://maven.pkg.github.com/themoment-team/datagsm-server")
-        credentials {
-            username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
-            password = providers.gradleProperty("gpr.token").orNull ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
 }
 
 dependencies {
-    implementation("team.themoment.datagsm.sdk:openapi:3.0.0")
+    implementation("io.github.themoment-team:datagsm-openapi-sdk-java:3.0.1")
 }
 ```
 
-토큰은 코드에 넣지 말고 `~/.gradle/gradle.properties`나 환경 변수로 전달하세요.
-```properties
-gpr.user=<GitHub 사용자명>
-gpr.token=<read:packages 권한 토큰>
-```
+#### Gradle (Groovy DSL)
+```groovy
+repositories {
+    mavenCentral()
+}
 
-GitHub Actions에서는 `GITHUB_ACTOR`와 `secrets.GITHUB_TOKEN`을 쓸 수 있습니다.
-다른 조직의 패키지를 읽을 때는 `read:packages` 권한이 있는 토큰을 시크릿으로 등록해 사용하세요.
+dependencies {
+    implementation 'io.github.themoment-team:datagsm-openapi-sdk-java:3.0.1'
+}
+```
 
 #### Maven
-`~/.m2/settings.xml`에 서버 인증 정보를 등록합니다.
 ```xml
-<settings>
-    <servers>
-        <server>
-            <id>github-datagsm-sdk</id>
-            <username>GITHUB_USERNAME</username>
-            <password>READ_PACKAGES_TOKEN</password>
-        </server>
-        <server>
-            <id>github-datagsm-server</id>
-            <username>GITHUB_USERNAME</username>
-            <password>READ_PACKAGES_TOKEN</password>
-        </server>
-    </servers>
-</settings>
-```
-
-`pom.xml`
-```xml
-<repositories>
-    <repository>
-        <id>github-datagsm-sdk</id>
-        <url>https://maven.pkg.github.com/themoment-team/datagsm-openapi-sdk-java</url>
-    </repository>
-    <repository>
-        <id>github-datagsm-server</id>
-        <url>https://maven.pkg.github.com/themoment-team/datagsm-server</url>
-    </repository>
-</repositories>
-
 <dependency>
-    <groupId>team.themoment.datagsm.sdk</groupId>
-    <artifactId>openapi</artifactId>
-    <version>3.0.0</version>
+    <groupId>io.github.themoment-team</groupId>
+    <artifactId>datagsm-openapi-sdk-java</artifactId>
+    <version>3.0.1</version>
 </dependency>
 ```
 
@@ -154,6 +110,13 @@ projects.deleteProject(created.getId());
 
 모든 예외는 `DataGsmException`을 상속합니다. 서버에 새 enum 값이 추가되면 nullable 필드는 `null`로,
 목록 안의 값은 제외하고 읽습니다.
+
+### 3.0.0에서 3.0.1로 마이그레이션
+
+배포 위치가 GitHub Packages에서 Maven Central로 바뀌면서 의존성 좌표가 바뀌었습니다. 코드의 패키지(`import`)는 그대로입니다.
+
+- 의존성을 `team.themoment.datagsm.sdk:openapi`에서 `io.github.themoment-team:datagsm-openapi-sdk-java`로 바꾸세요.
+- GitHub Packages 저장소(`maven.pkg.github.com/...`) 설정과 `gpr.user`/`gpr.token` 등 인증 정보는 지워도 됩니다.
 
 ### 2.x에서 3.0으로 마이그레이션
 
