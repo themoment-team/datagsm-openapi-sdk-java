@@ -24,8 +24,7 @@ repositories {
 
 dependencies {
     // Shared types from datagsm-server (api: 반환 타입이 공개 API에 노출되므로 소비자 컴파일 클래스패스에 포함)
-    // TODO: 서버 CD가 Maven Central에 배포한 datagsm-shared 버전으로 교체
-    api("io.github.themoment-team:datagsm-shared:SHARED_VERSION")
+    api("io.github.themoment-team:datagsm-shared:20261026-53")
     // JsonUtil이 LocalDate 직렬화에 직접 사용하므로 shared를 통해 전이되더라도 직접 선언
     api("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
